@@ -1,0 +1,34 @@
+<html layout:decorate="~{layout/resmenu}">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="card">
+                <div class="card-header">
+                    <span th:text="${menu.name}"></span>
+                    <span th:text="${menu.address}"></span>
+                    <span th:text="${menu.phone}"></span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="section : ${menu.sections}">
+                            <div class="section">
+                                <h4 th:text="${section.name}"></h4>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" th:each="product : ${section.products}">
+                                    <div class="section">
+                                        <h5 th:text="${product.name}"></h5>
+                                        <span th:text="${product.description}"></span>
+                                        <span th:text="${product.price}"></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+

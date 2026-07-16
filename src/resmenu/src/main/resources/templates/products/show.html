@@ -1,0 +1,18 @@
+<html layout:decorate="~{layout/main}">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="content">
+
+            <div>
+                <label for="name">Name</label>
+                <span th:text="${product.name}"></span>
+            </div>
+            <div>
+                <label for="description"></label>
+                <span th:text="${product.description}"></span>
+            </div>
+
+        </div>
+    </body>
+</html>

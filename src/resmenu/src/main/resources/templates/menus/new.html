@@ -1,0 +1,27 @@
+<html layout:decorate="~{layout/main}">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <form action="#" th:action="@{create}" th:object="${newMenuRq}" method="post">
+                <div>
+                    <label for="" class="form-label">Name</label>
+                    <input type="text" th:field="*{name}" name="name" class="form-control">
+                </div>
+                <div>
+                    <label for="" class="form-label">Address</label>
+                    <input type="text" th:field="*{address}" name="address" class="form-control">
+                </div>
+                <div>
+                    <label for="" class="form-label">Phone</label>
+                    <input type="text" th:field="*{phone}" name="phone" class="form-control">
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

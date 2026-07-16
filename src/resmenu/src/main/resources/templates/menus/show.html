@@ -1,0 +1,42 @@
+<html layout:decorate="~{layout/main}">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div>
+                <label for="name">Name</label>
+                <span name="name" th:text="${menu.name}"></span>
+            </div>
+            <div>
+                <label for="address">Address</label>
+                <span name="address" th:text="${menu.address}"></span>
+            </div>
+            <div>
+                <label for="phone">Phone</label>
+                <span name="phone" th:text="${menu.address}"></span>
+            </div>
+            <div class="mt-1">
+                <a th:href="@{/sections/{menuId}(menuId=${menu.id})}" class="btn btn-primary">
+                    <span class="bi bi-chevron-bar-expand"></span>
+                    Sections
+                </a>
+                <a th:href="@{/products/menu/{id}(id=${menu.id})}" class="btn btn-primary">
+                    <span class="bi bi-fork-knife"></span>
+                    Products
+                </a>
+            </div>
+            <div class="mt-1">
+                <a th:href="@{/sections/new/{menuId}(menuId=${menu.id})}" class="btn btn-primary">
+                    <span class="bi bi-plus-circle"></span>
+                    <span class="bi bi-chevron-bar-expand"></span>
+                    Add section
+                </a>
+                <a th:href="@{/products/new/{id}(id=${menu.id})}" class="btn btn-primary">
+                    <span class="bi bi-plus-circle"></span>
+                    <span class="bi bi-fork-knife"></span>
+                    Add product
+                </a>
+            </div>
+        </div>
+    </body>
+</html>

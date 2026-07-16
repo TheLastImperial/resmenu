@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: resmenu
+  datasource:
+    url: jdbc:postgresql://localhost:5432/resmenu
+    username: resmenu
+    password: 12345678
+  jpa:
+    hibernate:
+      ddl-auto: update
+

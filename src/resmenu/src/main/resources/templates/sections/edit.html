@@ -1,0 +1,24 @@
+<html layout:decorate="~{layout/main}">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <form action="#"
+                th:action="@{/sections/update/{menuId}/{id}(menuId=${menuId},id=${section.id})}"
+                th:object="${section}"
+                method="post"
+                >
+                <div>
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" th:field="*{name}" class="form-control">
+                    <input type="hidden" th:value="${menuId}" name="menuId">
+                </div>
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

@@ -66,6 +66,7 @@ public class SectionController {
         SectionEntity section = sectionService.get(id, menu);
         SectionRs response = new SectionRs();
         BeanUtils.copyProperties(section, response);
+        response.setMenuId(menuId);
         model.addAttribute("section", response);
         return "/sections/show";
     }
@@ -86,8 +87,8 @@ public class SectionController {
     ) {
         UserEntity user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(newSectionRq.getMenuId(), user);
-        sectionService.create(newSectionRq, menu);
-        return "redirect:/sections/" + newSectionRq.getMenuId();
+        SectionEntity section = sectionService.create(newSectionRq, menu);
+        return "redirect:/sections/show/" + newSectionRq.getMenuId() + "/" + section.getId();
     }
     
     @GetMapping("/edit/{menuId}/{id}")
@@ -111,8 +112,8 @@ public class SectionController {
     ) {
         UserEntity user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(menuId, user);
-        sectionService.edit(id, rq, menu);
-        return "redirect:/sections/" + menuId;
+        SectionEntity section = sectionService.edit(id, rq, menu);
+        return "redirect:/sections/show/" + menuId + "/" + section.getId();
     }
     
     @GetMapping("/delete/{menuId}/{id}")

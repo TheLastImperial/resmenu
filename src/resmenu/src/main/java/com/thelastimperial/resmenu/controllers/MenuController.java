@@ -59,14 +59,15 @@ public class MenuController {
     public String newMenu(NewMenuRq menu) {
         return "menus/new";
     }
+
     @PostMapping("/create")
     public String create(NewMenuRq menu, BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
             return "menus/new";
         }
         UserEntity user = userService.getByUsername(principal.getName());
-        menuService.create(menu, user);
-        return "redirect:/menus";
+        MenuEntity menuCreated = menuService.create(menu, user);
+        return "redirect:/menus/show/" + menuCreated.getId();
     }
 
     @GetMapping("/edit/{id}")
@@ -79,11 +80,12 @@ public class MenuController {
         model.addAttribute("menu", rs);
         return "menus/edit";
     }
+
     @PostMapping("/update/{id}")
     public String update(@PathVariable Long id, EditMenuRq editMenuRq, Principal principal) {
         UserEntity user = userService.getByUsername(principal.getName());
-        menuService.update(editMenuRq, id, user);
-        return "redirect:/menus";
+        MenuEntity menu = menuService.update(editMenuRq, id, user);
+        return "redirect:/menus/show/" + menu.getId();
     }
 
     @GetMapping("/show/{id}")

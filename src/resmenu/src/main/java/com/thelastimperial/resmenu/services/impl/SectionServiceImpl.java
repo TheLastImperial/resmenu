@@ -2,9 +2,6 @@ package com.thelastimperial.resmenu.services.impl;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.tomcat.util.net.SecureNio2Channel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,13 +21,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class SectionServiceImpl implements SectionService {
-    private final Log log = LogFactory.getLog(SectionServiceImpl.class);
     private final SectionRepository sectionRepository;
     @Override
     public SectionEntity create(NewSectionRq rq, MenuEntity menu) {
-        log.info("RQ: " + rq);
         SectionEntity toSave = SectionEntity.builder().name(rq.getName()).menu(menu).build();
-        log.info("Section: " + toSave.getName());
         return sectionRepository.save(toSave);
     }
 
@@ -42,9 +36,8 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public SectionEntity get(Long id, MenuEntity menu) {
-        return sectionRepository.findByIdAndMenu(id, menu).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST)
-        );
+        return sectionRepository.findByIdAndMenu(id, menu)
+            .orElse(null);
     }
 
     @Override

@@ -25,7 +25,6 @@ import com.thelastimperial.resmenu.services.SectionService;
 import com.thelastimperial.resmenu.services.UserService;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @AllArgsConstructor
 @Controller
 @RequestMapping("/products")
-@Slf4j
 public class ProductController {
     private final UserService userService;
     private final ProductService productService;
@@ -100,9 +98,8 @@ public class ProductController {
         UserEntity user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(rq.getMenuId(), user);
         SectionEntity section = sectionService.get(rq.getSectionId(), menu);
-        log.info("Product creation: {}", rq);
-        productService.create(rq, menu, section);
-        return "redirect:/products/menu/" + menu.getId();
+        ProductEntity product = productService.create(rq, menu, section);
+        return "redirect:/products/" + menu.getId() + "/" + product.getId();
     }
 
     @GetMapping("/delete/{menuId}/{id}")

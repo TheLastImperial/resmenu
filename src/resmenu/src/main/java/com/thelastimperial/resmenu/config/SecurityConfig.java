@@ -7,11 +7,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
+
+    public SecurityConfig(JwtAuthenticationConverter jwtAuthenticationConverter){
+        this.jwtAuthenticationConverter = jwtAuthenticationConverter;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http){
         http
@@ -19,8 +27,12 @@ public class SecurityConfig {
             auth
             .requestMatchers("/resmenu/**").permitAll()
             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+            .requestMatchers("/actuator/prometheus").hasRole("MONITOR")
             .anyRequest().authenticated()
         )
+        .oauth2ResourceServer(oauth2 -> {
+            oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter));
+        })
         .formLogin(Customizer.withDefaults());
         return http.build();
     }

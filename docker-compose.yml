@@ -10,9 +10,37 @@ services:
       - 5432:5432
     volumes:
       - ./db:/docker-entrypoint-initdb.d
-  # rabbit:
-  #   image: rabbitmq:4.3.2-management-alpine
-  #   container_name: rabbit
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
+  grafanadb:
+    image: postgres:18-alpine
+    container_name: grafanadb
+    environment:
+      - POSTGRES_DB=grafana
+      - POSTGRES_USER=grafana
+      - POSTGRES_PASSWORD=12345678
+    volumes:
+      - ./src/grafana/data:/var/lib/postgresql/18
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U grafana -d grafana"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./src/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./src/prometheus/data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  grafana:
+    image: grafana/grafana:11.6.16
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      grafanadb:
+        condition: service_healthy
+    environment:
+      - GF_DATABASE_URL=postgres://grafana:12345678@grafanadb:5432/grafana

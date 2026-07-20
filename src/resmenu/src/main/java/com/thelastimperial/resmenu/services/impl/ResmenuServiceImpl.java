@@ -16,7 +16,6 @@ import com.thelastimperial.resmenu.repositories.MenuRepository;
 import com.thelastimperial.resmenu.services.ResmenuService;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @Service

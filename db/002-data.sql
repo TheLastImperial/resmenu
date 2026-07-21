@@ -29,6 +29,14 @@ VALUES('019dffbe-d07e-7bfd-ab68-f566727ec57d', 'user', 'user@email.com',
     NOW()
 );
 
+INSERT INTO user_settings(
+    id, account_expired_at, created_at, credentials_expired_at, updated_at, user_id
+)
+VALUES(
+    '119dffbe-d07e-7bfd-ab68-f566727ec57d', '20260505', NOW(), NULL, NOW(),
+    '019dffbe-d07e-7bfd-ab68-f566727ec57d'
+);
+
 
 INSERT INTO user_role(user_id, role_id)
 VALUES

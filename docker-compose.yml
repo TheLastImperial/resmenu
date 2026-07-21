@@ -44,3 +44,10 @@ services:
         condition: service_healthy
     environment:
       - GF_DATABASE_URL=postgres://grafana:12345678@grafanadb:5432/grafana
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./src/grafana/loki:/loki

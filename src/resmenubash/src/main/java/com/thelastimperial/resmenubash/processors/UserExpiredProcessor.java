@@ -5,20 +5,16 @@ import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import com.thelastimperial.resmenubash.entities.UserEntity;
-import com.thelastimperial.resmenubash.entities.UserSettingEntity;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class UserExpiredProcessor implements ItemProcessor<UserSettingEntity, UserEntity> {
+public class UserExpiredProcessor implements ItemProcessor<UserEntity, UserEntity> {
     @Override
-    public @Nullable UserEntity process(UserSettingEntity item) throws Exception {
-        UserEntity user = item.getUser();
-        if(user != null){
-            log.info("User expired found: {}", user.getId());
-            user.setAccountNonExpired(false);
-        }
-        return user;
+    public @Nullable UserEntity process(UserEntity item) throws Exception {
+        log.info("Account expired: {}", item.getId());
+        item.setAccountNonExpired(false);
+        return item;
     }
 }

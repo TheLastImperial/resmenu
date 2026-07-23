@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: resmenubatch
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      namespace: develop
+      instance: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+        pushgateway:
+          enabled: true
+          address: localhost:9091
+          job: resmenubatch
+          shutdown-operation: post
+          grouping-key:
+            environment: production
+com:
+  thelastimperial:
+    resmenubatch:
+      userid: 019dffbe-d07e-7bfd-ab68-f566727ec57e

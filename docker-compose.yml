@@ -34,6 +34,12 @@ services:
       - ./src/prometheus/data:/prometheus
     extra_hosts:
       - "host.docker.internal:host-gateway"
+  pushgateway:
+    image: prom/pushgateway:v1.11.3
+    command:
+      - --persistence.interval=1h
+    ports: 
+      - "9091:9091"
   grafana:
     image: grafana/grafana:11.6.16
     container_name: grafana

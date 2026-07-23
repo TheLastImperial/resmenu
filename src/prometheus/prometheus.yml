@@ -6,3 +6,8 @@ scrape_configs:
       credentials: eyJraWQiOiI0ZWJiNmNmNC05YmIzLTQ5YmEtOWFjYi01ZmI2MzU0NDcyZWMiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwMTlkZmZiZS1kMDdlLTdiZmQtYWI2OC1mNTY2NzI3ZWM1N2MiLCJyb2xlcyI6WyJST0xFX01PTklUT1IiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxODQ3NjMyNzY1LCJpYXQiOjE3ODQ1NjA3NjUsImp0aSI6IjdjOTdjNDFiLTZhMjAtNDU4YS05ZDY3LTdiMjVjYzAxYTIzNSIsImVtYWlsIjoicHJvbWV0aGV1c0ByZXNtZW51LmNvbSJ9.ZiqnbW3YqhrXw9yiNeJZjmQLmH22s17iHHlU-Y3mLDgmGYltmgiRc3VYJ4cKdCDoKjqSXvuizXtA5BWi9LLuI33X187o7flYM5MN8e-WC1agD2QcAJrCiCkw0dNp2kow_kuYvLLMTiBAeNWrR-5nt_tzkweW77W64giI2Q2Eqrp7-hR9TEjA5rhe_aTyRfNY7tkC7ZEuUla_BmgnzcULIDj6Qr7NagTT2oTS7mw3Nr3E1j2XyH-0WYhA2cvRQWYayWRJKVEau8sz3MKFb1-qDSFXIj0h71JH7BBWPaLHw_eGOKXRRFEZ9JBOu_IVKqAA_X5ZTulSageDIgQ_USrASA
     static_configs:
       - targets: ['host.docker.internal:8080']
+  - job_name: 'pushgateway'
+    scrape_interval: 5s
+    honor_labels: true
+    static_configs:
+    - targets: ['pushgateway:9091']

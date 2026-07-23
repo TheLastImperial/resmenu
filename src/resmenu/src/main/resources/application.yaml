@@ -10,6 +10,11 @@ spring:
       ddl-auto: update
 
 management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      namespace: develop
+      instance: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   endpoints:
     web:
       exposure:

@@ -25,3 +25,7 @@ management:
           shutdown-operation: post
           grouping-key:
             environment: production
+com:
+  thelastimperial:
+    resmenubash:
+      userid: 019dffbe-d07e-7bfd-ab68-f566727ec57e

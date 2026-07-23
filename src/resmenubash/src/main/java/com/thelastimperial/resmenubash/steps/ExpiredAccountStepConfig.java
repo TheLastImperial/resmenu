@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -22,6 +23,7 @@ import org.springframework.batch.infrastructure.item.database.builder.JpaCursorI
 import org.springframework.batch.infrastructure.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.infrastructure.item.support.CompositeItemProcessor;
 import org.springframework.batch.infrastructure.item.support.CompositeItemWriter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -79,19 +81,23 @@ public class ExpiredAccountStepConfig {
     }
 
     @Bean
-    public JdbcBatchItemWriter<UserEntity> userAuditExpiredWriter(DataSource dataSource){
+    public JdbcBatchItemWriter<UserEntity> userAuditExpiredWriter(
+        DataSource dataSource,
+        @Value("${com.thelastimperial.resmenubash.userid}") String updatedBy
+    ){
         return new JdbcBatchItemWriterBuilder<UserEntity>()
             .dataSource(dataSource)
             .sql(
                 """
-                INSERT INTO user_audits(id, user_id, action, created_at, updated_at)
-                VALUES(gen_random_uuid(), :id, :action, NOW(), NOW())
+                INSERT INTO user_audits(id, user_id, action, updated_by, created_at, updated_at)
+                VALUES(gen_random_uuid(), :id, :action, :updatedBy, NOW(), NOW())
                 """
             )
             .itemSqlParameterSourceProvider((item)-> {
                 MapSqlParameterSource source = new MapSqlParameterSource();
                 source.addValue("id", item.getId());
                 source.addValue("action", UserAuditAction.ACCOUNT_EXPIRED.ordinal());
+                source.addValue("updatedBy", UUID.fromString(updatedBy));
                 return source;
             })
             .build();

@@ -29,6 +29,7 @@ public class UserAuditEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private UUID userId;
+    private UUID updatedBy;
     private UserAuditAction action;
 
     @CreationTimestamp

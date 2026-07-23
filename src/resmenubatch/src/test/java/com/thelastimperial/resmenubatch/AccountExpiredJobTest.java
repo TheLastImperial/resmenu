@@ -1,4 +1,4 @@
-package com.thelastimperial.resmenubash;
+package com.thelastimperial.resmenubatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

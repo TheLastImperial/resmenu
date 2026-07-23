@@ -1,4 +1,4 @@
-package com.thelastimperial.resmenubash.entities;
+package com.thelastimperial.resmenubatch.entities;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

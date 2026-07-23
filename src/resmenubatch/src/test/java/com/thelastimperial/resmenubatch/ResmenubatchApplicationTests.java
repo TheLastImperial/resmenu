@@ -1,10 +1,10 @@
-package com.thelastimperial.resmenubash;
+package com.thelastimperial.resmenubatch;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ResmenubashApplicationTests {
+class ResmenubatchApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: resmenubash
+    name: resmenubatch
 management:
   metrics:
     tags:
@@ -27,5 +27,5 @@ management:
             environment: production
 com:
   thelastimperial:
-    resmenubash:
+    resmenubatch:
       userid: 019dffbe-d07e-7bfd-ab68-f566727ec57e

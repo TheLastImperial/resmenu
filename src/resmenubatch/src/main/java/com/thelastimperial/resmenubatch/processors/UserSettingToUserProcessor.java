@@ -1,11 +1,11 @@
-package com.thelastimperial.resmenubash.processors;
+package com.thelastimperial.resmenubatch.processors;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
-import com.thelastimperial.resmenubash.entities.UserEntity;
-import com.thelastimperial.resmenubash.entities.UserSettingEntity;
+import com.thelastimperial.resmenubatch.entities.UserEntity;
+import com.thelastimperial.resmenubatch.entities.UserSettingEntity;
 
 import lombok.extern.slf4j.Slf4j;
 

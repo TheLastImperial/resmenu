@@ -1,4 +1,4 @@
-package com.thelastimperial.resmenubash.entities.enums;
+package com.thelastimperial.resmenubatch.entities.enums;
 
 public enum UserAuditAction {
     ACCOUNT_EXPIRED,

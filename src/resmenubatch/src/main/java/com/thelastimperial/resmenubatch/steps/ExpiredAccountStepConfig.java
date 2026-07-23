@@ -1,4 +1,4 @@
-package com.thelastimperial.resmenubash.steps;
+package com.thelastimperial.resmenubatch.steps;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,9 +29,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
-import com.thelastimperial.resmenubash.entities.UserEntity;
-import com.thelastimperial.resmenubash.entities.UserSettingEntity;
-import com.thelastimperial.resmenubash.entities.enums.UserAuditAction;
+import com.thelastimperial.resmenubatch.entities.UserEntity;
+import com.thelastimperial.resmenubatch.entities.UserSettingEntity;
+import com.thelastimperial.resmenubatch.entities.enums.UserAuditAction;
 
 import jakarta.persistence.EntityManagerFactory;
 
@@ -83,7 +83,7 @@ public class ExpiredAccountStepConfig {
     @Bean
     public JdbcBatchItemWriter<UserEntity> userAuditExpiredWriter(
         DataSource dataSource,
-        @Value("${com.thelastimperial.resmenubash.userid}") String updatedBy
+        @Value("${com.thelastimperial.resmenubatch.userid}") String updatedBy
     ){
         return new JdbcBatchItemWriterBuilder<UserEntity>()
             .dataSource(dataSource)

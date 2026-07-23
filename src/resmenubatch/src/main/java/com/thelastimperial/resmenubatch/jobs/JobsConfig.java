@@ -1,4 +1,4 @@
-package com.thelastimperial.resmenubash.jobs;
+package com.thelastimperial.resmenubatch.jobs;
 
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;

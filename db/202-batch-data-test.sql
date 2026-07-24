@@ -33,7 +33,7 @@ VALUES(
     '019dffbe-d07e-7bfd-ab68-f566727ec580'
 ),
 (
-    '119dffbe-d07e-7bfd-ab68-f566727ec581', '20200101', NOW(), NULL, NOW(),
+    '119dffbe-d07e-7bfd-ab68-f566727ec581', NULL, NOW(), '20200101', NOW(),
     '019dffbe-d07e-7bfd-ab68-f566727ec581'
 ),
 (

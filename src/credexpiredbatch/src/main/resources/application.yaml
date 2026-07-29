@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: credexpiredbatch
+  datasource:
+    url: jdbc:postgresql://db:5432/resmenu
+    username: resmenu
+    password: 12345678
+com:
+  thelastimperial:
+    credexpiredbatch:
+      userid: 019dffbe-d07e-7bfd-ab68-f566727ec57e

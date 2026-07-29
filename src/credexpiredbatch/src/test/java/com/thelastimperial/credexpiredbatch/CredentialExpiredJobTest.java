@@ -1,13 +1,13 @@
-package com.thelastimperial.resmenubatch;
+package com.thelastimperial.credexpiredbatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.job.Job;
-import org.springframework.batch.core.job.JobExecution;
-import org.springframework.batch.test.JobOperatorTestUtils;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.JobRepositoryTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,38 +17,35 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 @SpringBatchTest
 @SpringBootTest
-public class AccountExpiredJobTest {
+public class CredentialExpiredJobTest {
     @Autowired
-    private Job accountExpiredJob;
-
+    Job accountExpiredJob;
     @Autowired
-    private JobOperatorTestUtils jobOperatorTestUtils;
+    JobLauncherTestUtils jobLauncherTestUtils;
     @Autowired
-    private JobRepositoryTestUtils jobRepositoryTestUtils;
+    JdbcTemplate jdbcTemplate;
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JobRepositoryTestUtils jobRepositoryTestUtils;
 
     @BeforeEach
     public void setUp() {
         jobRepositoryTestUtils.removeJobExecutions();
     }
-
-    @Test
-    public void accountExpiredJobTest() throws Exception {
-        jobOperatorTestUtils.setJob(accountExpiredJob);
-        JobExecution jobExe = jobOperatorTestUtils.startJob();
-        assertEquals(ExitStatus.COMPLETED, jobExe.getExitStatus());
+    
+    public void runTest() throws Exception {
+        jobLauncherTestUtils.setJob(accountExpiredJob);
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob();
+        assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
         assertEquals(1,
             JdbcTestUtils.countRowsInTableWhere(
                 jdbcTemplate,
-                "user_audits", "action=0"
+                "user_audits", "action=2"
             )
         );
-        
         assertEquals(
             2,
             JdbcTestUtils.countRowsInTableWhere(
-                jdbcTemplate, "users", "account_non_expired='f'"
+                jdbcTemplate, "users", "credentials_non_expired='f'"
             )
         );
     }

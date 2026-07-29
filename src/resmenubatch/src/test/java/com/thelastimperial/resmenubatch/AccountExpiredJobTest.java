@@ -31,7 +31,6 @@ public class AccountExpiredJobTest {
     @BeforeEach
     public void setUp() {
         jobRepositoryTestUtils.removeJobExecutions();
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "user_audits");
     }
 
     @Test
@@ -39,11 +38,15 @@ public class AccountExpiredJobTest {
         jobOperatorTestUtils.setJob(accountExpiredJob);
         JobExecution jobExe = jobOperatorTestUtils.startJob();
         assertEquals(ExitStatus.COMPLETED, jobExe.getExitStatus());
-        assertEquals(3,
-            JdbcTestUtils.countRowsInTable(jdbcTemplate, "user_audits")
+        assertEquals(1,
+            JdbcTestUtils.countRowsInTableWhere(
+                jdbcTemplate,
+                "user_audits", "action=0"
+            )
         );
+        
         assertEquals(
-            3,
+            2,
             JdbcTestUtils.countRowsInTableWhere(
                 jdbcTemplate, "users", "account_non_expired='f'"
             )

@@ -60,7 +60,11 @@ public class ExpiredAccountStepConfig {
         EntityManagerFactory entityManagerFactory
     ) {
         String queryString = """ 
-            SELECT us FROM UserSettingEntity us WHERE us.accountExpiredAt < :today
+            SELECT us
+            FROM UserSettingEntity us
+            INNER JOIN us.user u
+            WHERE us.accountExpiredAt < :today
+                AND u.accountNonExpired = true
         """;
 
         Map<String, Object> parameters = new HashMap<>();
@@ -121,13 +125,13 @@ public class ExpiredAccountStepConfig {
     @Bean
     public CompositeItemProcessor<UserSettingEntity, UserEntity> userExpiredCompositeProcessor(
         ItemProcessor<UserSettingEntity, UserEntity> userSettingToUserProcessor,
-        ItemProcessor<UserEntity, UserEntity> userExpiredAuditProcessor
+        ItemProcessor<UserEntity, UserEntity> UserExpiredProcessor
     ){
         CompositeItemProcessor<UserSettingEntity, UserEntity> compositeItemProcessor =
             new CompositeItemProcessor();
         List delegates = new ArrayList();
         delegates.add(userSettingToUserProcessor);
-        delegates.add(userExpiredAuditProcessor);
+        delegates.add(UserExpiredProcessor);
         compositeItemProcessor.setDelegates(delegates);
         return compositeItemProcessor;
     }

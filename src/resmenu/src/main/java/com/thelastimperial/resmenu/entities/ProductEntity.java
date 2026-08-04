@@ -1,6 +1,7 @@
 package com.thelastimperial.resmenu.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -30,6 +31,7 @@ public class ProductEntity {
     private String name;
     private String description;
     private Double price;
+    private UUID imageId;
 
     @ManyToOne
     @JoinColumn(name = "section_id")

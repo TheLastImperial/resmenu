@@ -16,8 +16,14 @@
                                 <h4 th:text="${section.name}"></h4>
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" th:each="product : ${section.products}">
-                                    <div class="section">
+                                <li
+                                    class="list-group-item"
+                                    th:each="product : ${section.products}"
+                                >
+                                    <div class="section"
+                                        th:attr="data-image-id=${product.imageId}, data-image-alt=${product.name}"
+                                        onclick="setImg(this)"
+                                    >
                                         <h5 th:text="${product.name}"></h5>
                                         <span th:text="${product.description}"></span>
                                         <span th:text="${product.price}"></span>
@@ -28,6 +34,34 @@
                     </ul>
                 </div>
             </div>
+
+            <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-body p-0">
+                            <img src=""
+                                id="modalImage"
+                                class="img-fluid"
+                                alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script th:inline="javascript">
+                const setImg = (ele) => {
+                    const imageId = ele.getAttribute('data-image-id');
+                    const imageAlt = ele.getAttribute('data-image-alt');
+                    if(imageId === null){
+                        return
+                    }
+                    let element = document.getElementById("modalImage");
+                    element.setAttribute("src", `/r/${imageId}`);
+                    element.setAttribute("alt", imageAlt);
+                    const modalEle = document.getElementById("modal");
+                    const modal = new bootstrap.Modal(modalEle);
+                    modal.show();
+                }
+            </script>
         </div>
     </body>
 </html>

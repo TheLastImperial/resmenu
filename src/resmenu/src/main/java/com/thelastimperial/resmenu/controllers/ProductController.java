@@ -18,13 +18,16 @@ import com.thelastimperial.resmenu.controllers.rs.SectionRs;
 import com.thelastimperial.resmenu.entities.MenuEntity;
 import com.thelastimperial.resmenu.entities.ProductEntity;
 import com.thelastimperial.resmenu.entities.SectionEntity;
+import com.thelastimperial.resmenu.entities.StorageEntity;
 import com.thelastimperial.resmenu.entities.UserEntity;
 import com.thelastimperial.resmenu.services.MenuService;
 import com.thelastimperial.resmenu.services.ProductService;
 import com.thelastimperial.resmenu.services.SectionService;
+import com.thelastimperial.resmenu.services.StorageService;
 import com.thelastimperial.resmenu.services.UserService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,11 +37,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @AllArgsConstructor
 @Controller
 @RequestMapping("/products")
+@Slf4j
 public class ProductController {
     private final UserService userService;
     private final ProductService productService;
     private final MenuService menuService;
     private final SectionService sectionService;
+    private final StorageService storageService;
 
     @GetMapping("/{menuId}/{id}")
     public String get(@PathVariable Long menuId, @PathVariable Long id, Principal principal,
@@ -87,14 +92,21 @@ public class ProductController {
 
         newProductRq.setMenuId(menuId);
         model.addAttribute("sections", sections);
-        return "/products/new";
+        return "products/new";
     }
     
     @PostMapping("/create")
-    public String create(NewProductRq rq, BindingResult result, Principal principal) {
+    public String create(NewProductRq rq, BindingResult result, Principal principal) throws Exception{
         if(result.hasErrors()){
-            return "redirect:/products/new";
+            log.error("Errors: {}", result);
+            return "redirect:/products/new/" + rq.getMenuId();
         }
+
+        if(rq.getImage() != null){
+            StorageEntity storageEntity = storageService.create(rq.getImage());
+            rq.setImageId(storageEntity.getId());
+        }
+
         UserEntity user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(rq.getMenuId(), user);
         SectionEntity section = sectionService.get(rq.getSectionId(), menu);

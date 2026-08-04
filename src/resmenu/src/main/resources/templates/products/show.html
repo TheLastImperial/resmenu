@@ -3,7 +3,11 @@
     </head>
     <body>
         <div layout:fragment="content">
-
+            <div>
+                <img th:src="@{/r/{id}(id=${product.imageId})}" alt="product.name"
+                    class="img-thumbnail"
+                    width="200px">
+            </div>
             <div>
                 <label for="name">Name</label>
                 <span th:text="${product.name}"></span>

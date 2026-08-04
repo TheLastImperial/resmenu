@@ -27,6 +27,7 @@ public class SecurityConfig {
             auth
             .requestMatchers("/resmenu/**").permitAll()
             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+            .requestMatchers("/r/*").permitAll()
             .requestMatchers("/actuator/prometheus").hasRole("MONITOR")
             .anyRequest().authenticated()
         )

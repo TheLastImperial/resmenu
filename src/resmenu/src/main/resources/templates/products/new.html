@@ -7,7 +7,8 @@
                 action="#"
                 th:object="${newProductRq}"
                 th:action="@{/products/create}"
-                method="post">
+                method="post"
+                enctype="multipart/form-data">
                 <div>
                     <label for="name" class="form-label">Name</label>
                     <input type="text" th:field="*{name}" name="name" class="form-control">
@@ -30,6 +31,10 @@
                 <div>
                     <label for="price" class="form-label">Price</label>
                     <input type="number" th:field="*{price}" class="form-control">
+                </div>
+                <div>
+                    <label for="image" class="form-label">Image</label>
+                    <input type="file" th:field="*{image}" class="form-control">
                 </div>
                 <div class="mt-1">
                     <button type="submit" class="btn btn-primary">

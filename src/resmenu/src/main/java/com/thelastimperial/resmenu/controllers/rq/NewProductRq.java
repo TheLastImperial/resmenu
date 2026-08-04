@@ -1,5 +1,9 @@
 package com.thelastimperial.resmenu.controllers.rq;
 
+import java.util.UUID;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +19,6 @@ public class NewProductRq {
     private Double price;
     private Long menuId;
     private Long sectionId;
+    private MultipartFile image;
+    private UUID imageId;
 }

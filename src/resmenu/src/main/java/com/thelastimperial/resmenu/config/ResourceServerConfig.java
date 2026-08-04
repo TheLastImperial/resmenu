@@ -23,12 +23,12 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
 @Configuration
-public class ResourceConfig {
+public class ResourceServerConfig {
     private final String keyId;
     private final String publicKey;
     private final String privateKey;
 
-	public ResourceConfig(
+	public ResourceServerConfig(
         @Value("${com.thelastimperial.resmenu.security.keyid}")
         String keyId,
         @Value("${com.thelastimperial.resmenu.security.publicKey}")

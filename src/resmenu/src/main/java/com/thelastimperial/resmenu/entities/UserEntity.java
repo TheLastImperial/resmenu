@@ -63,6 +63,9 @@ public class UserEntity {
     @OneToOne(mappedBy = "user")
     private UserSettingEntity setting;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserRecoveryEntity> recoveries;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

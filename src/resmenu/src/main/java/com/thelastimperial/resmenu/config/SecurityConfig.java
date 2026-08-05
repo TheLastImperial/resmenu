@@ -27,6 +27,7 @@ public class SecurityConfig {
             auth
             .requestMatchers("/resmenu/**").permitAll()
             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+            .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/r/*").permitAll()
             .requestMatchers("/actuator/prometheus").hasRole("MONITOR")
             .anyRequest().authenticated()
@@ -34,7 +35,14 @@ public class SecurityConfig {
         .oauth2ResourceServer(oauth2 -> {
             oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter));
         })
-        .formLogin(Customizer.withDefaults());
+        .formLogin(
+            login ->
+                login
+                .loginPage("/auth/login")
+                .failureUrl("/auth/login?error=true")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+        );
         return http.build();
     }
 

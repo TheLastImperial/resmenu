@@ -1,0 +1,39 @@
+<html layout:decorate="~{/auth/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="card shadow-lg p-4 p-md-5">
+    <div class="text-center mb-4">
+      <div class="logo-container">
+        <i class="bi bi-shield-lock-fill"></i>
+      </div>
+      <h3 class="fw-bold text-dark m-0">Recuperar contraseña</h3>
+    </div>
+
+    <form
+      th:action="@{/auth/recovery}"
+      th:object="${recoveryRq}"
+      method="POST">
+      
+      <div class="mb-3">
+        <label for="username" class="form-label text-secondary fw-semibold small">
+          Correo Electrónico
+        </label>
+        <div class="input-group">
+          <input
+            th:field="*{username}"
+            type="text"
+            class="form-control" id="username" placeholder="Email" required>
+            
+        </div>
+        <span th:if="${param.generated}">We send a email to recovery password.</span>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body>
+</html>

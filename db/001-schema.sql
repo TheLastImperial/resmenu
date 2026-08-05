@@ -100,5 +100,5 @@ CREATE TABLE public.user_audits (
     updated_at timestamp(6) without time zone NOT NULL,
     updated_by uuid,
     user_id uuid,
-    CONSTRAINT user_audits_action_check CHECK (((action >= 0) AND (action <= 5)))
+    CONSTRAINT user_audits_action_check CHECK (((action >= 0) AND (action <= 6)))
 );

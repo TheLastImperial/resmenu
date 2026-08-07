@@ -2,6 +2,7 @@ package com.thelastimperial.resmenu.controllers;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -40,8 +41,8 @@ public class SectionController {
         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size,
         @PathVariable Long menuId, Principal principal, Model model
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         List<SectionEntity> sections = sectionService.getAll(menu, page, size);
         List<SectionRs> response = sections.stream().map(section ->{
             SectionRs resp = new SectionRs();
@@ -61,8 +62,8 @@ public class SectionController {
     public String show(
         @PathVariable Long menuId, @PathVariable Long id, Principal principal, Model model
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         SectionEntity section = sectionService.get(id, menu);
         SectionRs response = new SectionRs();
         BeanUtils.copyProperties(section, response);
@@ -75,8 +76,8 @@ public class SectionController {
     public String newSection(
         @PathVariable Long menuId, Principal principal, NewSectionRq newSectionRq
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         newSectionRq.setMenuId(menu.getId());
         return "/sections/new";
     }
@@ -85,8 +86,8 @@ public class SectionController {
     public String create(
         NewSectionRq newSectionRq, Principal principal
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(newSectionRq.getMenuId(), user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(newSectionRq.getMenuId(), user.orElse(null));
         SectionEntity section = sectionService.create(newSectionRq, menu);
         return "redirect:/sections/show/" + newSectionRq.getMenuId() + "/" + section.getId();
     }
@@ -95,8 +96,8 @@ public class SectionController {
     public String edit(@PathVariable Long menuId, @PathVariable Long id, Principal principal,
         Model model
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         SectionEntity section = sectionService.get(id, menu);
         SectionRs sectionToEdit = new SectionRs();
         BeanUtils.copyProperties(section, sectionToEdit);
@@ -110,16 +111,16 @@ public class SectionController {
         @PathVariable Long menuId, @PathVariable Long id, EditSectionRq rq,
         Principal principal
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         SectionEntity section = sectionService.edit(id, rq, menu);
         return "redirect:/sections/show/" + menuId + "/" + section.getId();
     }
     
     @GetMapping("/delete/{menuId}/{id}")
     public String delete(@PathVariable Long menuId, @PathVariable Long id, Principal principal) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         sectionService.delete(id, menu);
         return "redirect:/sections/" + menuId;
     }

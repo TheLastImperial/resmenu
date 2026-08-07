@@ -3,6 +3,7 @@ package com.thelastimperial.resmenu.controllers;
 import com.thelastimperial.resmenu.repositories.MenuRepository;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -43,10 +44,10 @@ public class MenuController {
     public String index(Model model, Principal principal,
         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
 
         List<MenuRs> menus = menuService
-        .getAll(user, page, size).stream().map(ent -> {
+        .getAll(user.orElse(null), page, size).stream().map(ent -> {
             MenuRs rs = new MenuRs();
             BeanUtils.copyProperties(ent, rs);
             return rs;
@@ -65,15 +66,15 @@ public class MenuController {
         if (result.hasErrors()) {
             return "menus/new";
         }
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menuCreated = menuService.create(menu, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menuCreated = menuService.create(menu, user.orElse(null));
         return "redirect:/menus/show/" + menuCreated.getId();
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model, Principal principal) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menuEnt = menuService.get(id, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menuEnt = menuService.get(id, user.orElse(null));
         MenuRs rs = new MenuRs();
         BeanUtils.copyProperties(menuEnt, rs);
 
@@ -83,15 +84,15 @@ public class MenuController {
 
     @PostMapping("/update/{id}")
     public String update(@PathVariable Long id, EditMenuRq editMenuRq, Principal principal) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.update(editMenuRq, id, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.update(editMenuRq, id, user.orElse(null));
         return "redirect:/menus/show/" + menu.getId();
     }
 
     @GetMapping("/show/{id}")
     public String show(@PathVariable Long id, Principal principal, Model model) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menuEntity = menuService.get(id, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menuEntity = menuService.get(id, user.orElse(null));
         MenuRs menuRs = new MenuRs();
         BeanUtils.copyProperties(menuEntity, menuRs);
         model.addAttribute("menu", menuRs);
@@ -100,8 +101,8 @@ public class MenuController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id, Principal principal){
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(id, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(id, user.orElse(null));
         menuRepository.delete(menu);
         return "redirect:/menus";
     }

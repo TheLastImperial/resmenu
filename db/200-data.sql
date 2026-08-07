@@ -56,23 +56,21 @@ VALUES (4, '2026-07-17 17:53:16.11691', 'Bebidas', '2026-07-17 17:53:16.116946',
 ---------- Products --------
 INSERT INTO public.products
 VALUES (
-    1, '2026-07-17 17:54:46.908291', 'Vainas de soya tiernas hervidas al vapor.', 'Edamanes', 80,
-    '2026-07-17 17:54:46.908324', 1, 1
-);
-INSERT INTO public.products
-VALUES (
+    1, '2026-07-17 17:54:46.908291', 'Vainas de soya tiernas hervidas al vapor.', null, 'Edamanes',
+    80, '2026-07-17 17:54:46.908324', 1, 1
+),
+(
     2, '2026-07-17 17:55:30.710348',
-    'Sushie empanizado con camaron, res, queso Filadelfia, aguacate y pepino.', 'Mar y Tierra', 140,
-    '2026-07-17 17:55:30.710384', 1, 2
-);
-INSERT INTO public.products
-VALUES (
-    3, '2026-07-17 17:55:49.835794', 'Delicioso flan de vainilla', 'Flan', 110,
+    'Sushie empanizado con camaron, res, queso Filadelfia, aguacate y pepino.', null,
+    'Mar y Tierra', 140, '2026-07-17 17:55:30.710384', 1, 2
+),
+(
+    3, '2026-07-17 17:55:49.835794', 'Delicioso flan de vainilla', null, 'Flan', 110,
     '2026-07-17 17:55:49.835827', 1, 3
-);
-INSERT INTO public.products
-VALUES (
-    4, '2026-07-17 17:56:06.650712', 'Te de refill', 'Te', 45, '2026-07-17 17:56:06.650742', 1, 4
+),
+(
+    4, '2026-07-17 17:56:06.650712', 'Te de refill', null, 'Te', 45, '2026-07-17 17:56:06.650742',
+    1, 4
 );
 
 ---------- Next id value ------------

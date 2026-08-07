@@ -11,19 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewPasswordRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
+import com.thelastimperial.resmenu.entities.UserEntity;
 import com.thelastimperial.resmenu.entities.UserRecoveryEntity;
 import com.thelastimperial.resmenu.services.AuthService;
+import com.thelastimperial.resmenu.services.UserService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @AllArgsConstructor
 @Controller
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 public class AuthController {
     private final AuthService authService;
+    private final UserService userService;
 
     @GetMapping("/login")
     public String login() {
@@ -75,13 +75,23 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String createUser(NewUserRq newUserRq, BindingResult bindingResult) {
-        log.info("Request: {}", newUserRq);
+    public String createUser(@Valid NewUserRq newUserRq, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
+            log.info("Errors: {}", bindingResult);
+            return "auth/register";
+        }
+        Optional<UserEntity> user = userService.getByUsername(newUserRq.getUsername());
+        if(user.isPresent()){
+            bindingResult.rejectValue(
+                "username", 
+                "EmailAlreadyExists",
+                "The Email already exists."
+            );
+            log.info("Error: {}", bindingResult);
             return "auth/register";
         }
         authService.createUser(newUserRq);
         return "redirect:/auth/login";
     }
-    
+
 }

@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean createUser(NewUserRq rq) {
+    public Optional<UserEntity> createUser(NewUserRq rq) {
         UserEntity user = UserEntity.builder()
             .email(rq.getUsername())
             .username(rq.getUsername())
@@ -102,8 +102,8 @@ public class AuthServiceImpl implements AuthService {
             .enabled(false)
             .build();
         log.info("New User: {}", user);
-        userRepository.save(user);
-        return true;
+        UserEntity saved = userRepository.save(user);
+        return Optional.of(saved);
     }
 
 }

@@ -133,5 +133,4 @@ public class RecoveryTest {
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/"));
     }
-
 }

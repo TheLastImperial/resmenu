@@ -1,6 +1,7 @@
 package com.thelastimperial.resmenu.services.impl;
 
 import com.thelastimperial.resmenu.repositories.UserRepository;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,8 +52,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Optional<UserRecoveryEntity> getRecovery(UUID id) {
-        Optional<UserRecoveryEntity> recovery = userRecoveryRepository.findById(id);
+    public Optional<UserRecoveryEntity> getRecovery(String id) {
+        UUID uuid = null;
+        try {
+            uuid = UUID.fromString(id);
+        }catch(Exception e) {
+            log.info("Wrong UUID pattern.");
+            return Optional.empty();
+        }
+        Optional<UserRecoveryEntity> recovery = userRecoveryRepository.findById(uuid);
         if(recovery.isEmpty()){
             log.info("There is not a recovery id: {}", id);
             return Optional.empty();
@@ -73,6 +81,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<UserRecoveryEntity> recoveryOpt = getRecovery(rq.getToken());
         if(recoveryOpt.isEmpty())
             return null;
+
         if(!rq.getPassword().equals(rq.getPasswordConfirmation())){
             log.info("Token: {} try to restart password but doesn't use the same to confirm.");
             return null;

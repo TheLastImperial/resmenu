@@ -54,19 +54,33 @@ public class AuthController {
         return "redirect:/auth/recovery?generated=" + generated;
     }
 
+    @GetMapping("/invalid-token")
+    public String invalidToken() {
+        return "auth/invalid-token";
+    }
+    
     @GetMapping("/new_password/{token}")
-    public String newPassword(@PathVariable UUID token, NewPasswordRq newPasswordRq, Model model) {
+    public String newPassword(
+        @PathVariable String token, NewPasswordRq newPasswordRq, Model model
+    ) {
         Optional<UserRecoveryEntity> recovery = authService.getRecovery(token);
-        if(recovery.isEmpty())
-            return "auth/invalid-token";
+        if(recovery.isEmpty()){
+            return "redirect:/auth/invalid-token";
+        }
         model.addAttribute("token", token);
         return "auth/new-password";
     }
 
     @PostMapping("/new_password")
-    public String createNewPassword(NewPasswordRq newPasswordRq) {
-        authService.createNewPassword(newPasswordRq);
-        return "redirect:/login";
+    public String createNewPassword(@Valid NewPasswordRq newPasswordRq, BindingResult result) {
+        if(result.hasErrors()){
+            return "auth/new-password";
+        }
+        UserRecoveryEntity recovery = authService.createNewPassword(newPasswordRq);
+        if(recovery == null){
+            return "redirect:/auth/invalid-token";
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/register")

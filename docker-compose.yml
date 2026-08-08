@@ -5,6 +5,7 @@ services:
     container_name: db
     restart: always
     environment:
+      TZ: America/Mazatlan
       LANG: en_US.utf8
       LC_ALL: en_US.utf8
       JDK_JAVA_OPTIONS: '-Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8'

@@ -2,7 +2,6 @@ package com.thelastimperial.resmenu.controllers.auth;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -106,7 +105,7 @@ public class RegisterTest {
         .andExpect(
             model()
                 .attributeHasFieldErrorCode(
-                    "newUserRq", "username", "EmailAlreadyExists"
+                    "newUserRq", "username", "UsernameExists"
                 )
         );
     }

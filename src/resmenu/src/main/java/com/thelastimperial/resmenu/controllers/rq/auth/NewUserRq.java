@@ -1,6 +1,7 @@
 package com.thelastimperial.resmenu.controllers.rq.auth;
 
 import com.thelastimperial.resmenu.controllers.validation.EqualsStrings;
+import com.thelastimperial.resmenu.controllers.validation.UsernameExists;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,9 @@ public class NewUserRq {
     @Pattern(
         regexp="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
         message = "Bad email pattern."
+    )
+    @UsernameExists(
+        message = "Email already exists"
     )
     private String username;
     @Pattern(

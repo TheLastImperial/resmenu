@@ -1,7 +1,6 @@
 package com.thelastimperial.resmenu.controllers;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewPasswordRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
-import com.thelastimperial.resmenu.entities.UserEntity;
 import com.thelastimperial.resmenu.entities.UserRecoveryEntity;
 import com.thelastimperial.resmenu.services.AuthService;
 import com.thelastimperial.resmenu.services.UserService;
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Slf4j
 public class AuthController {
     private final AuthService authService;
-    private final UserService userService;
 
     @GetMapping("/login")
     public String login() {
@@ -94,18 +91,7 @@ public class AuthController {
             log.info("Errors: {}", bindingResult);
             return "auth/register";
         }
-        Optional<UserEntity> user = userService.getByUsername(newUserRq.getUsername());
-        if(user.isPresent()){
-            bindingResult.rejectValue(
-                "username", 
-                "EmailAlreadyExists",
-                "The Email already exists."
-            );
-            log.info("Error: {}", bindingResult);
-            return "auth/register";
-        }
         authService.createUser(newUserRq);
         return "redirect:/auth/login";
     }
-
 }

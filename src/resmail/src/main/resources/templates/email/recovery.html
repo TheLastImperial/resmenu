@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Password recovery</title>
+</head>
+<body>
+    <h1>Hello, <span th:text="${username}">User</span>!</h1>
+    <p>
+        Use the next link to restart your password.
+    </p>
+    <a th:href="${url}">Recovery</a>
+    <p>Or copy and paste on your blowser</p>
+    <p th:text="${url}"></p>
+</body>
+</html>

@@ -36,6 +36,7 @@ public class UserRecoveryEntity {
     @ColumnDefault(value="false")
     private boolean isUsed;
     private LocalDateTime validUntilAt;
+    private String email;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

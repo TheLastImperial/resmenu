@@ -12,7 +12,6 @@ import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
 import com.thelastimperial.resmenu.entities.UserRecoveryEntity;
 import com.thelastimperial.resmenu.services.AuthService;
-import com.thelastimperial.resmenu.services.UserService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -46,9 +45,8 @@ public class AuthController {
             log.info("Errors: {}", bindingResult);
             return "auth/recovery";
         }
-        UserRecoveryEntity recovery = authService.setRecovery(recoveryRq);
-        boolean generated = recovery != null;
-        return "redirect:/auth/recovery?generated=" + generated;
+        authService.setRecovery(recoveryRq);
+        return "redirect:/auth/recovery?generated=true";
     }
 
     @GetMapping("/invalid-token")

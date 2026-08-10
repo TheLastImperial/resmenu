@@ -3,12 +3,14 @@ package com.thelastimperial.resmenu.services.impl;
 import com.thelastimperial.resmenu.repositories.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.thelastimperial.resmenu.controllers.rq.MailRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewPasswordRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
@@ -19,6 +21,7 @@ import com.thelastimperial.resmenu.entities.enums.UserAuditAction;
 import com.thelastimperial.resmenu.repositories.UserAuditRepository;
 import com.thelastimperial.resmenu.repositories.UserRecoveryRepository;
 import com.thelastimperial.resmenu.services.AuthService;
+import com.thelastimperial.resmenu.services.MailRequestService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,23 +34,17 @@ public class AuthServiceImpl implements AuthService {
     private final UserRecoveryRepository userRecoveryRepository;
     private final UserAuditRepository userAuditRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailRequestService mailRequestService;
 
     @Override
     public UserRecoveryEntity setRecovery(RecoveryRq rq) {
         Optional<UserEntity> userOpt = userRepository.findByEmail(rq.getUsername());
-        boolean isUsed = false;
+        UserRecoveryEntity saved = null;
         if(userOpt.isEmpty()){
-            log.error("There is traying to recovery password for a user that not exists.");
-            isUsed = true;
+            handleFailure(rq);
+        }else {
+            handleSuccess(userOpt.get(), rq);
         }
-        UserRecoveryEntity toSave = UserRecoveryEntity
-            .builder()
-            .user(userOpt.get())
-            .validUntilAt(LocalDateTime.now().plusMinutes(15))
-            .isUsed(isUsed)
-            .build();
-        UserRecoveryEntity saved = userRecoveryRepository.save(toSave);
-        log.info("URL: localhost:8080/auth/new_password/{}", saved.getId() );
         return saved;
     }
 
@@ -115,4 +112,47 @@ public class AuthServiceImpl implements AuthService {
         return Optional.of(saved);
     }
 
+    public UserRecoveryEntity handleSuccess(UserEntity user, RecoveryRq rq){
+        UserRecoveryEntity toSave = UserRecoveryEntity
+            .builder()
+            .user(user)
+            .email(rq.getUsername())
+            .validUntilAt(LocalDateTime.now().plusMinutes(15))
+            .isUsed(false)
+            .build();
+        UserRecoveryEntity saved = userRecoveryRepository.save(toSave);
+
+        String address = "http://localhost:8080";
+
+        mailRequestService.sendMail(
+            MailRq
+            .builder()
+            .to(user.getEmail())
+            .subject("Recovery password")
+            .html(true)
+            .content("email/recovery")
+            .contentName("RecoveryPassword")
+            .params(new HashMap<String, Object>() {{
+                put("username", user.getUsername());
+                put(
+                    "url",
+                    String.format("%s/auth/new_password/%s", address, saved.getId())
+                );
+            }})
+            .build()
+        );
+        return saved;
+    }
+
+    public UserRecoveryEntity handleFailure(RecoveryRq rq) {
+        log.info("Email doesn't exists: {}", rq.getUsername());
+        UserRecoveryEntity toSave = UserRecoveryEntity
+            .builder()
+            .email(rq.getUsername())
+            .validUntilAt(LocalDateTime.now())
+            .isUsed(true)
+            .build();
+        UserRecoveryEntity saved = userRecoveryRepository.save(toSave);
+        return saved;        
+    }
 }

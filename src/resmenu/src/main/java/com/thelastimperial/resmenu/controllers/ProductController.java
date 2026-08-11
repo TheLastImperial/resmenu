@@ -2,6 +2,7 @@ package com.thelastimperial.resmenu.controllers;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -49,8 +50,8 @@ public class ProductController {
     public String get(@PathVariable Long menuId, @PathVariable Long id, Principal principal,
         Model model
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         ProductEntity product = productService.get(id, menu);
         ProductRs response = new ProductRs();
         BeanUtils.copyProperties(product, response);
@@ -64,8 +65,8 @@ public class ProductController {
     public String index(Principal principal, Model model, @PathVariable Long menuId,
         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         List<ProductRs> products = productService.getAll(menu, page, size).stream().map(prod -> {
             ProductRs resp = new ProductRs();
             BeanUtils.copyProperties(prod, resp);
@@ -82,8 +83,8 @@ public class ProductController {
     
     @GetMapping("/new/{menuId}")
     public String newProduct(@PathVariable Long menuId, NewProductRq newProductRq, Principal principal, Model model) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);        
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));        
         List<SectionRs> sections = sectionService.getAll(menu).stream().map(sect -> {
             SectionRs section = new SectionRs();
             BeanUtils.copyProperties(sect, section);
@@ -107,8 +108,8 @@ public class ProductController {
             rq.setImageId(storageEntity.getId());
         }
 
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(rq.getMenuId(), user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(rq.getMenuId(), user.orElse(null));
         SectionEntity section = sectionService.get(rq.getSectionId(), menu);
         ProductEntity product = productService.create(rq, menu, section);
         return "redirect:/products/" + menu.getId() + "/" + product.getId();
@@ -116,8 +117,8 @@ public class ProductController {
 
     @GetMapping("/delete/{menuId}/{id}")
     public String delete(@PathVariable Long menuId, @PathVariable Long id, Principal principal) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(id, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(id, user.orElse(null));
         productService.delete(id, menu);
         return "redirect:/products/menu/" + menuId;
     }
@@ -126,8 +127,8 @@ public class ProductController {
     public String edit(@PathVariable Long menuId, @PathVariable Long id,
         Model model, Principal principal
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(id, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(id, user.orElse(null));
         ProductEntity product = productService.get(id, menu);
         ProductRs response = new ProductRs();
         BeanUtils.copyProperties(product, response);
@@ -139,8 +140,8 @@ public class ProductController {
     public String update(@PathVariable Long menuId, @PathVariable Long id, Principal principal,
         EditProductRq rq
     ) {
-        UserEntity user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(menuId, user);
+        Optional<UserEntity> user = userService.getByUsername(principal.getName());
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         productService.edit(id, rq, menu);
         return "redirect:/products/" + menuId + "/" + id;
     }

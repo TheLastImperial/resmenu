@@ -20,11 +20,11 @@ VALUES('019dffbe-d07e-7bfd-ab68-f566727ec580', 'batchTest1', 'batchTest1@email.c
     '$2a$10$eO6sAdt3WNQscoIA1f.RmuTNTF.ovZseDmr1jRBteIOMmDRSgknlG',
     true, true, true, true, now(), now()
 ),
-('019dffbe-d07e-7bfd-ab68-f566727ec582', 'batchTest3', 'batchTest@email.com',
+('019dffbe-d07e-7bfd-ab68-f566727ec582', 'batchTest3', 'batchTest3@email.com',
     '$2a$10$eO6sAdt3WNQscoIA1f.RmuTNTF.ovZseDmr1jRBteIOMmDRSgknlG',
     false, true, true, true, now(), now()
 ),
-('019dffbe-d07e-7bfd-ab68-f566727ec583', 'batchTest3', 'batchTest@email.com',
+('019dffbe-d07e-7bfd-ab68-f566727ec583', 'batchTest4', 'batchTest4@email.com',
     '$2a$10$eO6sAdt3WNQscoIA1f.RmuTNTF.ovZseDmr1jRBteIOMmDRSgknlG',
     true, true, false, true, now(), now()
 );

@@ -1,0 +1,102 @@
+package com.thelastimperial.resmenu.controllers;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.thelastimperial.resmenu.controllers.rq.auth.NewPasswordRq;
+import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
+import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
+import com.thelastimperial.resmenu.entities.UserRecoveryEntity;
+import com.thelastimperial.resmenu.services.AuthService;
+
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@AllArgsConstructor
+@Controller
+@RequestMapping(path="/auth")
+@Slf4j
+public class AuthController {
+    private final AuthService authService;
+
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
+
+    @GetMapping("/recovery")
+    public String recovery(RecoveryRq recoveryRq) {
+        return "auth/recovery";
+    }
+    
+    @PostMapping("/recovery")
+    public String sendRecovery(RecoveryRq recoveryRq, BindingResult bindingResult) {
+        log.info("Received: {}", recoveryRq);
+        if(bindingResult.hasErrors()){
+            log.info("Errors: {}", bindingResult);
+            return "auth/recovery";
+        }
+        authService.setRecovery(recoveryRq);
+        return "redirect:/auth/recovery?generated=true";
+    }
+
+    @GetMapping("/invalid-token")
+    public String invalidToken() {
+        return "auth/invalid-token";
+    }
+    
+    @GetMapping("/new_password/{token}")
+    public String newPassword(
+        @PathVariable String token, NewPasswordRq newPasswordRq, Model model
+    ) {
+        Optional<UserRecoveryEntity> recovery = authService.getRecovery(token);
+        if(recovery.isEmpty()){
+            return "redirect:/auth/invalid-token";
+        }
+        model.addAttribute("token", token);
+        return "auth/new-password";
+    }
+
+    @PostMapping("/new_password")
+    public String createNewPassword(@Valid NewPasswordRq newPasswordRq, BindingResult result) {
+        if(result.hasErrors()){
+            return "auth/new-password";
+        }
+        UserRecoveryEntity recovery = authService.createNewPassword(newPasswordRq);
+        if(recovery == null){
+            return "redirect:/auth/invalid-token";
+        }
+        return "redirect:/auth/login";
+    }
+
+    @GetMapping("/register")
+    public String newUser(NewUserRq newUserRq) {
+        return "auth/register";
+    }
+
+    @PostMapping("/register")
+    public String createUser(@Valid NewUserRq newUserRq, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            log.info("Errors: {}", bindingResult);
+            return "auth/register";
+        }
+        authService.createUser(newUserRq);
+        return "redirect:/auth/login";
+    }
+
+    @GetMapping("/activate/{tokenId}")
+    public String activateAccount(@PathVariable String tokenId) {
+        authService.activateAccount(tokenId);
+        return "auth/activate";
+    }
+    
+}

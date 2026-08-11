@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -40,8 +41,9 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(unique = true, nullable = false)
     private String username;
     private String password;
     private boolean enabled;
@@ -62,6 +64,12 @@ public class UserEntity {
 
     @OneToOne(mappedBy = "user")
     private UserSettingEntity setting;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserRecoveryEntity> recoveries;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserActivationEntity> activations;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

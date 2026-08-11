@@ -1,9 +1,10 @@
 package com.thelastimperial.resmenu.services.impl;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.thelastimperial.resmenu.entities.UserEntity;
@@ -12,30 +13,30 @@ import com.thelastimperial.resmenu.services.UserService;
 
 @Service
 public class UserServiceImpl implements UserService{
+    private final String emailPattern;
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(
+        @Value("${com.thelastimperial.resmenu.patterns.email}") String emailPattern,
+        UserRepository userRepository
+    ){
+        this.emailPattern = emailPattern;
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserEntity getByUsername(String username) {
-        UserEntity user = new UserEntity();
-        String emailPatter = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\\\.[A-Za-z0-9_-]+)*@"+
-            "[^-][A-Za-z0-9-]+(\\\\.[A-Za-z0-9-]+)*(\\\\.[A-Za-z]{2,})$";
+    public Optional<UserEntity> getByUsername(String username) {
+        Optional<UserEntity> user = Optional.empty();
 
         if(isUUID(username)){
             user = userRepository
-                .findById(UUID.fromString(username))
-                .orElseThrow(()-> new UsernameNotFoundException(username));
-        }else if(Pattern.compile(emailPatter).matcher(username).matches()){
+                .findById(UUID.fromString(username));
+        }else if(Pattern.compile(emailPattern).matcher(username).matches()){
             user = userRepository
-                .findByEmail(username)
-                .orElseThrow(()-> new UsernameNotFoundException(username));
+                .findByEmail(username);
         }else{
             user = userRepository
-                .findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException(username));
+                .findByUsername(username);
         }
 
         return user;

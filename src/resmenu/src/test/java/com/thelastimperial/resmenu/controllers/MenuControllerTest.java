@@ -91,7 +91,7 @@ public class MenuControllerTest {
             .param("phone", phone)
         )
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrlPattern("/show/*"));
+        .andExpect(redirectedUrlPattern("/menus/show/*"));
 
         mockMvc.perform(
             get("/menus/show/" + menuId)

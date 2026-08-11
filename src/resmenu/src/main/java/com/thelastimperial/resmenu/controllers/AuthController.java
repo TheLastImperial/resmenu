@@ -92,4 +92,11 @@ public class AuthController {
         authService.createUser(newUserRq);
         return "redirect:/auth/login";
     }
+
+    @GetMapping("/activate/{tokenId}")
+    public String activateAccount(@PathVariable String tokenId) {
+        authService.activateAccount(tokenId);
+        return "auth/activate";
+    }
+    
 }

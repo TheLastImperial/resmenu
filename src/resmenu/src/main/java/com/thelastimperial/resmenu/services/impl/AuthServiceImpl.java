@@ -14,10 +14,12 @@ import com.thelastimperial.resmenu.controllers.rq.MailRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewPasswordRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
+import com.thelastimperial.resmenu.entities.UserActivationEntity;
 import com.thelastimperial.resmenu.entities.UserAuditEntity;
 import com.thelastimperial.resmenu.entities.UserEntity;
 import com.thelastimperial.resmenu.entities.UserRecoveryEntity;
 import com.thelastimperial.resmenu.entities.enums.UserAuditAction;
+import com.thelastimperial.resmenu.repositories.UserActivationRepository;
 import com.thelastimperial.resmenu.repositories.UserAuditRepository;
 import com.thelastimperial.resmenu.repositories.UserRecoveryRepository;
 import com.thelastimperial.resmenu.services.AuthService;
@@ -35,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserAuditRepository userAuditRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailRequestService mailRequestService;
+    private final UserActivationRepository userActivationRepository;
 
     @Override
     public UserRecoveryEntity setRecovery(RecoveryRq rq) {
@@ -109,7 +112,67 @@ public class AuthServiceImpl implements AuthService {
             .build();
         log.info("New User: {}", user);
         UserEntity saved = userRepository.save(user);
+
+        String address = "http://localhost:8080";
+        UserActivationEntity activation = userActivationRepository.save(
+          UserActivationEntity
+          .builder()
+          .user(user)
+          .build()  
+        );
+        mailRequestService.sendMail(
+            MailRq
+            .builder()
+            .to(user.getEmail())
+            .subject("Account activation")
+            .html(true)
+            .content("email/activate-account")
+            .contentName("ActivateAccount")
+            .params(new HashMap<String, Object>() {{
+                put("username", user.getUsername());
+                put(
+                    "url",
+                    String.format("%s/auth/activate/%s", address, activation.getId())
+                );
+            }})
+            .build()
+        );
         return Optional.of(saved);
+    }
+
+    @Override
+    public void activateAccount(String tokenId){
+        UUID uuid = UUID.randomUUID();
+        try{
+            uuid = UUID.fromString(tokenId);
+        }catch(Exception e){
+            log.info("Error casting UUID");
+            log.info(e.getMessage());
+            return;
+        }
+        Optional<UserActivationEntity> activationOpt = userActivationRepository.findById(uuid);
+        if(activationOpt.isEmpty()){
+            log.info("There is not a activation with id: {}", uuid);
+            return;
+        }
+        UserActivationEntity activation = activationOpt.get();
+        if(activation.isUsed()){
+            log.info("The activation is used.");
+            return;
+        }
+        UserEntity user = activation.getUser();
+        user.setEnabled(true);
+        activation.setActivatedAt(LocalDateTime.now());
+        activation.setUsed(true);;
+        userAuditRepository.save(
+          UserAuditEntity.builder()
+          .action(UserAuditAction.ACCOUNT_ACTIVATION)
+          .userId(user.getId())
+          .updatedBy(user.getId())
+          .build()  
+        );
+        userRepository.save(user);
+        userActivationRepository.save(activation);
     }
 
     public UserRecoveryEntity handleSuccess(UserEntity user, RecoveryRq rq){
@@ -133,7 +196,6 @@ public class AuthServiceImpl implements AuthService {
             .content("email/recovery")
             .contentName("RecoveryPassword")
             .params(new HashMap<String, Object>() {{
-                put("username", user.getUsername());
                 put(
                     "url",
                     String.format("%s/auth/new_password/%s", address, saved.getId())

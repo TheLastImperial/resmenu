@@ -13,4 +13,5 @@ public interface AuthService {
     public Optional<UserRecoveryEntity> getRecovery(String id);
     public UserRecoveryEntity createNewPassword(NewPasswordRq rq);
     public Optional<UserEntity> createUser(NewUserRq rq);
+    public void activateAccount(String tokenId);
 }

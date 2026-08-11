@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict FiD1bFWxZmYRoim2Ywg4YtSVJZTP15IyJqcFtT2sg9zr3ZZqp7UAuEpHEH1u5v4
+\restrict fijyLeFyPymvyer4IhPJ4enEoPm1e1REbXXu5fakLXfaLoxuuTyg9QBk4XqhsiR
 
 -- Dumped from database version 18.4
 -- Dumped by pg_dump version 18.4
@@ -39,6 +39,8 @@ CREATE TABLE public.menus (
 );
 
 
+ALTER TABLE public.menus OWNER TO resmenu;
+
 --
 -- Name: menus_id_seq; Type: SEQUENCE; Schema: public; Owner: resmenu
 --
@@ -70,6 +72,8 @@ CREATE TABLE public.products (
 );
 
 
+ALTER TABLE public.products OWNER TO resmenu;
+
 --
 -- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: resmenu
 --
@@ -96,6 +100,8 @@ CREATE TABLE public.roles (
 );
 
 
+ALTER TABLE public.roles OWNER TO resmenu;
+
 --
 -- Name: sections; Type: TABLE; Schema: public; Owner: resmenu
 --
@@ -108,6 +114,8 @@ CREATE TABLE public.sections (
     menu_id bigint
 );
 
+
+ALTER TABLE public.sections OWNER TO resmenu;
 
 --
 -- Name: sections_id_seq; Type: SEQUENCE; Schema: public; Owner: resmenu
@@ -139,6 +147,8 @@ CREATE TABLE public.storage_blobs (
 );
 
 
+ALTER TABLE public.storage_blobs OWNER TO resmenu;
+
 --
 -- Name: user_audits; Type: TABLE; Schema: public; Owner: resmenu
 --
@@ -150,9 +160,15 @@ CREATE TABLE public.user_audits (
     updated_at timestamp(6) without time zone NOT NULL,
     updated_by uuid,
     user_id uuid,
-    CONSTRAINT user_audits_action_check CHECK (((action >= 0) AND (action <= 6)))
+    CONSTRAINT user_audits_action_check CHECK (((action >= 0) AND (action <= 7)))
 );
 
+
+ALTER TABLE public.user_audits OWNER TO resmenu;
+
+--
+-- Name: user_recoveries; Type: TABLE; Schema: public; Owner: resmenu
+--
 
 CREATE TABLE public.user_recoveries (
     id uuid NOT NULL,
@@ -165,6 +181,8 @@ CREATE TABLE public.user_recoveries (
 );
 
 
+ALTER TABLE public.user_recoveries OWNER TO resmenu;
+
 --
 -- Name: user_role; Type: TABLE; Schema: public; Owner: resmenu
 --
@@ -174,6 +192,8 @@ CREATE TABLE public.user_role (
     role_id uuid NOT NULL
 );
 
+
+ALTER TABLE public.user_role OWNER TO resmenu;
 
 --
 -- Name: user_settings; Type: TABLE; Schema: public; Owner: resmenu
@@ -188,6 +208,8 @@ CREATE TABLE public.user_settings (
     user_id uuid
 );
 
+
+ALTER TABLE public.user_settings OWNER TO resmenu;
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: resmenu
@@ -206,6 +228,8 @@ CREATE TABLE public.users (
     username character varying(255) NOT NULL
 );
 
+
+ALTER TABLE public.users OWNER TO resmenu;
 
 --
 -- Name: menus menus_pkey; Type: CONSTRAINT; Schema: public; Owner: resmenu
@@ -379,5 +403,5 @@ ALTER TABLE ONLY public.user_role
 -- PostgreSQL database dump complete
 --
 
-\unrestrict FiD1bFWxZmYRoim2Ywg4YtSVJZTP15IyJqcFtT2sg9zr3ZZqp7UAuEpHEH1u5v4
+\unrestrict fijyLeFyPymvyer4IhPJ4enEoPm1e1REbXXu5fakLXfaLoxuuTyg9QBk4XqhsiR
 

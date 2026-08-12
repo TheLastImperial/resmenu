@@ -1,0 +1,13 @@
+package com.thelastimperial.resdomain.repositories;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.repository.CrudRepository;
+
+import com.thelastimperial.resdomain.entities.UserEntity;
+
+public interface UserRepository extends CrudRepository<UserEntity, UUID>{
+    public Optional<UserEntity> findByEmail(String email);
+    public Optional<UserEntity> findByUsername(String username);
+}

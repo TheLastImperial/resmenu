@@ -2,10 +2,10 @@ package com.thelastimperial.resmenu.services;
 
 import java.util.List;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.SectionEntity;
 import com.thelastimperial.resmenu.controllers.rq.EditSectionRq;
 import com.thelastimperial.resmenu.controllers.rq.NewSectionRq;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.SectionEntity;
 
 public interface SectionService {
     public SectionEntity create(NewSectionRq rq, MenuEntity menu);

@@ -7,12 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.ProductEntity;
+import com.thelastimperial.resdomain.repositories.MenuRepository;
 import com.thelastimperial.resmenu.controllers.rs.ResProductRs;
 import com.thelastimperial.resmenu.controllers.rs.ResSectionRs;
 import com.thelastimperial.resmenu.controllers.rs.ResmenuRs;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.ProductEntity;
-import com.thelastimperial.resmenu.repositories.MenuRepository;
 import com.thelastimperial.resmenu.services.ResmenuService;
 
 import lombok.AllArgsConstructor;

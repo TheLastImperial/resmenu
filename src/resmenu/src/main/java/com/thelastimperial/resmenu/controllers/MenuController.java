@@ -1,6 +1,5 @@
 package com.thelastimperial.resmenu.controllers;
 
-import com.thelastimperial.resmenu.repositories.MenuRepository;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -13,11 +12,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
+import com.thelastimperial.resdomain.repositories.MenuRepository;
 import com.thelastimperial.resmenu.controllers.rq.EditMenuRq;
 import com.thelastimperial.resmenu.controllers.rq.NewMenuRq;
 import com.thelastimperial.resmenu.controllers.rs.MenuRs;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.UserEntity;
 import com.thelastimperial.resmenu.services.MenuService;
 import com.thelastimperial.resmenu.services.UserService;
 

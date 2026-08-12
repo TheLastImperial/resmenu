@@ -9,11 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
+import com.thelastimperial.resdomain.repositories.MenuRepository;
 import com.thelastimperial.resmenu.controllers.rq.EditMenuRq;
 import com.thelastimperial.resmenu.controllers.rq.NewMenuRq;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.UserEntity;
-import com.thelastimperial.resmenu.repositories.MenuRepository;
 import com.thelastimperial.resmenu.services.MenuService;
 
 import lombok.AllArgsConstructor;

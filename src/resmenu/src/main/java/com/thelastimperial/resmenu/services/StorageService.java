@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.thelastimperial.resmenu.entities.StorageEntity;
+import com.thelastimperial.resdomain.entities.StorageEntity;
 
 public interface StorageService {
     public StorageEntity create(MultipartFile file) throws Exception;

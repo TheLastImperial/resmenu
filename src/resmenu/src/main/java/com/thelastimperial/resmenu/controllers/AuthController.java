@@ -7,10 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.thelastimperial.resdomain.entities.UserRecoveryEntity;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewPasswordRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
-import com.thelastimperial.resmenu.entities.UserRecoveryEntity;
 import com.thelastimperial.resmenu.services.AuthService;
 
 import jakarta.validation.Valid;

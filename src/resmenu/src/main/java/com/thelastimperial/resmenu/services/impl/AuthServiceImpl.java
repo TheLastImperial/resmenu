@@ -1,7 +1,5 @@
 package com.thelastimperial.resmenu.services.impl;
 
-import com.thelastimperial.resmenu.repositories.UserRepository;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Optional;
@@ -10,18 +8,19 @@ import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.thelastimperial.resdomain.entities.UserActivationEntity;
+import com.thelastimperial.resdomain.entities.UserAuditEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
+import com.thelastimperial.resdomain.entities.UserRecoveryEntity;
+import com.thelastimperial.resdomain.entities.enums.UserAuditAction;
+import com.thelastimperial.resdomain.repositories.UserActivationRepository;
+import com.thelastimperial.resdomain.repositories.UserAuditRepository;
+import com.thelastimperial.resdomain.repositories.UserRecoveryRepository;
+import com.thelastimperial.resdomain.repositories.UserRepository;
 import com.thelastimperial.resmenu.controllers.rq.MailRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewPasswordRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.NewUserRq;
 import com.thelastimperial.resmenu.controllers.rq.auth.RecoveryRq;
-import com.thelastimperial.resmenu.entities.UserActivationEntity;
-import com.thelastimperial.resmenu.entities.UserAuditEntity;
-import com.thelastimperial.resmenu.entities.UserEntity;
-import com.thelastimperial.resmenu.entities.UserRecoveryEntity;
-import com.thelastimperial.resmenu.entities.enums.UserAuditAction;
-import com.thelastimperial.resmenu.repositories.UserActivationRepository;
-import com.thelastimperial.resmenu.repositories.UserAuditRepository;
-import com.thelastimperial.resmenu.repositories.UserRecoveryRepository;
 import com.thelastimperial.resmenu.services.AuthService;
 import com.thelastimperial.resmenu.services.MailRequestService;
 

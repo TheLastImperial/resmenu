@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.thelastimperial.resmenu.entities.UserEntity;
-import com.thelastimperial.resmenu.repositories.UserRepository;
+import com.thelastimperial.resdomain.entities.UserEntity;
+import com.thelastimperial.resdomain.repositories.UserRepository;
 import com.thelastimperial.resmenu.services.UserService;
 
 @Service

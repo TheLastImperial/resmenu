@@ -2,10 +2,10 @@ package com.thelastimperial.resmenu.services;
 
 import java.util.List;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
 import com.thelastimperial.resmenu.controllers.rq.EditMenuRq;
 import com.thelastimperial.resmenu.controllers.rq.NewMenuRq;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.UserEntity;
 
 public interface MenuService {
     public MenuEntity create(NewMenuRq rq, UserEntity user);

@@ -3,8 +3,8 @@ package com.thelastimperial.resmail.services.impl;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
-import com.thelastimperial.resmail.entities.MailAuditEntity;
-import com.thelastimperial.resmail.repositories.MailAuditRepository;
+import com.thelastimperial.resdomain.entities.MailAuditEntity;
+import com.thelastimperial.resdomain.repositories.MailAuditRepository;
 import com.thelastimperial.resmail.rq.MailRq;
 import com.thelastimperial.resmail.services.MailRequestService;
 

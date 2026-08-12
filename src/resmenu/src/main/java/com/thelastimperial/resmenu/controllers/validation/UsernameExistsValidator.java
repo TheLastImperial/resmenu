@@ -2,7 +2,7 @@ package com.thelastimperial.resmenu.controllers.validation;
 
 import java.util.Optional;
 
-import com.thelastimperial.resmenu.entities.UserEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
 import com.thelastimperial.resmenu.services.UserService;
 
 import jakarta.validation.ConstraintValidator;

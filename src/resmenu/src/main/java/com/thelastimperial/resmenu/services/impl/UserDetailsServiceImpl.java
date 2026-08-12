@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.thelastimperial.resmenu.entities.UserEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
 import com.thelastimperial.resmenu.services.UserService;
 
 import lombok.AllArgsConstructor;

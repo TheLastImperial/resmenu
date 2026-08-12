@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.thelastimperial.resmenu.entities.StorageEntity;
-import com.thelastimperial.resmenu.repositories.StorageRepository;
+import com.thelastimperial.resdomain.entities.StorageEntity;
+import com.thelastimperial.resdomain.repositories.StorageRepository;
 import com.thelastimperial.resmenu.services.StorageService;
 
 import lombok.extern.slf4j.Slf4j;

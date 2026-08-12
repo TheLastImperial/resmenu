@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.SectionEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
 import com.thelastimperial.resmenu.controllers.rq.EditSectionRq;
 import com.thelastimperial.resmenu.controllers.rq.NewSectionRq;
 import com.thelastimperial.resmenu.controllers.rs.MenuRs;
 import com.thelastimperial.resmenu.controllers.rs.SectionRs;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.SectionEntity;
-import com.thelastimperial.resmenu.entities.UserEntity;
 import com.thelastimperial.resmenu.services.MenuService;
 import com.thelastimperial.resmenu.services.SectionService;
 import com.thelastimperial.resmenu.services.UserService;

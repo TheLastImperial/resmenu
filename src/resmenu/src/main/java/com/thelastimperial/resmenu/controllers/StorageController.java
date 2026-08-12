@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.thelastimperial.resmenu.entities.StorageEntity;
+import com.thelastimperial.resdomain.entities.StorageEntity;
 import com.thelastimperial.resmenu.services.StorageService;
 
 import lombok.extern.slf4j.Slf4j;

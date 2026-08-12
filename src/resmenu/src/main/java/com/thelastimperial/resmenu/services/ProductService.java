@@ -2,11 +2,11 @@ package com.thelastimperial.resmenu.services;
 
 import java.util.List;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.ProductEntity;
+import com.thelastimperial.resdomain.entities.SectionEntity;
 import com.thelastimperial.resmenu.controllers.rq.EditProductRq;
 import com.thelastimperial.resmenu.controllers.rq.NewProductRq;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.ProductEntity;
-import com.thelastimperial.resmenu.entities.SectionEntity;
 
 public interface ProductService {
     public ProductEntity create(NewProductRq rq, MenuEntity menu, SectionEntity section);

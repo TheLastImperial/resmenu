@@ -52,10 +52,11 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/", true)
                 .permitAll()
         )
-        .logout(logout ->
-            logout
-                .logoutUrl("/auth/logout")
-                .logoutSuccessUrl("/auth/login")
+        .logout(logout -> logout
+            .logoutUrl("/auth/logout")
+            .logoutSuccessUrl("/auth/login")
+            .permitAll()
+
         );
         return http.build();
     }

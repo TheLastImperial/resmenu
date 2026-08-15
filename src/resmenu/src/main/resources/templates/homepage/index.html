@@ -4,7 +4,30 @@
     </head>
     <body>
         <div layout:fragment="content">
-            Soy el index
+            <div class="text-center mb-5">
+            <h1 class="fw-bold">
+                Dashboard
+            </h1>
+            <p class="text-muted">
+                Menus administrations
+            </p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+            <div class="col-12 col-md-4">
+                <a th:href="@{/menus}" class="card-link d-block">
+                <div class="card h-100 text-center p-4 shadow-sm">
+                    <div class="icon-circle bg-primary bg-opacity-10 text-primary mx-auto">
+                    <i class="bi bi-menu-button-wide"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Menus</h3>
+                    <p class="text-muted mb-0">
+                        Create, edit, delete and show Menus.
+                    </p>
+                </div>
+                </a>
+            </div>
+            </div>
         </div>
     </body>
 </html>

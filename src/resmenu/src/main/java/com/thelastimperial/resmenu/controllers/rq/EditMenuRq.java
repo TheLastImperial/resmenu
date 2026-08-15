@@ -1,5 +1,6 @@
 package com.thelastimperial.resmenu.controllers.rq;
 
+import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +11,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class EditMenuRq {
+    @Max(value=100)
     private String name;
+    @Max(value=100)
     private String address;
+    @Max(value=12)
     private String phone;
+    @Max(value=100)
+    private String description;
 
     private boolean active;
 }

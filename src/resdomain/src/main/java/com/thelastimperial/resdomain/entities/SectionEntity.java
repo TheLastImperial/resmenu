@@ -31,7 +31,8 @@ public class SectionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    
+    private String description;
+
     @OneToMany(mappedBy = "section", fetch = FetchType.LAZY)
     private List<ProductEntity> products;
     

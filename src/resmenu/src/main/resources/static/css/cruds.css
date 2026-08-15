@@ -1,0 +1,19 @@
+.form-container {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+}
+.table-container {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+}
+.status-badge {
+    min-width: 80px;
+    display: inline-block;
+}
+.action-btn {
+    padding: 0.25rem 0.5rem;
+}

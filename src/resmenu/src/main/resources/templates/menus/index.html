@@ -6,8 +6,10 @@
         <div layout:fragment="content">
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
             <div>
-              <h1 class="h3 fw-bold mb-0">Gestión de menús</h1>
-              <p class="text-muted mb-0">Administra los menús del restaurante.</p>
+              <h1 class="h3 fw-bold mb-0">Menu administration</h1>
+              <p class="text-muted mb-0">
+                Admnistrate all your menus
+              </p>
             </div>
             <a
               class="btn btn-primary"
@@ -22,11 +24,11 @@
               <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
-                    <th>Nombre</th>
+                    <th>Name</th>
                     <th>Address</th>
                     <th>Phone</th>
-                    <th class="text-center">Estado</th>
-                    <th class="text-end">Acciones</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-end">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="menusTableBody">
@@ -106,7 +108,7 @@
               <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                   <h5 class="modal-title">
-                    Eliminar menú
+                    Delete menu
                   </h5>
                   <button type="button" class="btn-close btn-close-white"
                     data-bs-dismiss="modal" aria-label="Cerrar">
@@ -114,15 +116,15 @@
                 </div>
                 <div class="modal-body">
                   <p class="mb-0">
-                    ¿Estás seguro de que deseas eliminar el menú <strong id="deleteName"></strong>?
+                    You realy want to delete the menu <strong id="deleteName"></strong>?
                   </p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Cancelar
+                    Cancel
                   </button>
                   <a type="button" class="btn btn-danger" id="linkDelete">
-                    Eliminar
+                    Delete
                   </a>
                 </div>
               </div>

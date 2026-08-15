@@ -6,8 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,18 +21,22 @@ import com.thelastimperial.resdomain.entities.UserEntity;
 import com.thelastimperial.resmenu.controllers.rq.EditSectionRq;
 import com.thelastimperial.resmenu.controllers.rq.NewSectionRq;
 import com.thelastimperial.resmenu.controllers.rs.MenuRs;
+import com.thelastimperial.resmenu.controllers.rs.ProductRs;
 import com.thelastimperial.resmenu.controllers.rs.SectionRs;
 import com.thelastimperial.resmenu.services.MenuService;
 import com.thelastimperial.resmenu.services.SectionService;
 import com.thelastimperial.resmenu.services.UserService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
 @AllArgsConstructor
 @Controller
 @RequestMapping("/sections")
+@Slf4j
 public class SectionController {
     private final UserService userService;
     private final MenuService menuService;
@@ -43,7 +49,8 @@ public class SectionController {
     ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(menuId, user.orElse(null));
-        List<SectionEntity> sections = sectionService.getAll(menu, page, size);
+
+        Page<SectionEntity> sections = sectionService.getAll(menu, page, size);
         List<SectionRs> response = sections.stream().map(section ->{
             SectionRs resp = new SectionRs();
             BeanUtils.copyProperties(section, resp);
@@ -54,6 +61,11 @@ public class SectionController {
         model.addAttribute("sections", response);
         model.addAttribute("menuId", menuId);
         model.addAttribute("menu", menuRs);
+
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalElements", sections.getTotalElements());
+        model.addAttribute("currentPage", sections.getNumber());
+        model.addAttribute("totalPages", sections.getTotalPages());
 
         return "/sections/index";
     }
@@ -68,6 +80,13 @@ public class SectionController {
         SectionRs response = new SectionRs();
         BeanUtils.copyProperties(section, response);
         response.setMenuId(menuId);
+
+        section.getProducts().stream().forEach(prod -> {
+            ProductRs product = new ProductRs();
+            BeanUtils.copyProperties(prod, product);
+            response.getProducts().add(product);
+        });
+
         model.addAttribute("section", response);
         return "/sections/show";
     }
@@ -84,8 +103,11 @@ public class SectionController {
 
     @PostMapping("/create")
     public String create(
-        NewSectionRq newSectionRq, Principal principal
+        @Valid NewSectionRq newSectionRq, BindingResult result, Principal principal
     ) {
+        if(result.hasErrors()){
+            return "/sections/new";
+        }
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(newSectionRq.getMenuId(), user.orElse(null));
         SectionEntity section = sectionService.create(newSectionRq, menu);
@@ -94,26 +116,24 @@ public class SectionController {
     
     @GetMapping("/edit/{menuId}/{id}")
     public String edit(@PathVariable Long menuId, @PathVariable Long id, Principal principal,
-        Model model
+        Model model, EditSectionRq editSectionRq
     ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(menuId, user.orElse(null));
         SectionEntity section = sectionService.get(id, menu);
-        SectionRs sectionToEdit = new SectionRs();
-        BeanUtils.copyProperties(section, sectionToEdit);
-        model.addAttribute("section", sectionToEdit);
+        BeanUtils.copyProperties(section, editSectionRq);
         model.addAttribute("menuId", menuId);
         return "/sections/edit";
     }
 
     @PostMapping("/update/{menuId}/{id}")
     public String update(
-        @PathVariable Long menuId, @PathVariable Long id, EditSectionRq rq,
+        @PathVariable Long menuId, @PathVariable Long id, EditSectionRq editSectionRq,
         Principal principal
     ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(menuId, user.orElse(null));
-        SectionEntity section = sectionService.edit(id, rq, menu);
+        SectionEntity section = sectionService.edit(id, editSectionRq, menu);
         return "redirect:/sections/show/" + menuId + "/" + section.getId();
     }
     

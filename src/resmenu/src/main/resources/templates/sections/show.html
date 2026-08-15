@@ -1,12 +1,55 @@
-<html layout:decorate="~{layout/main}">
+<html layout:decorate="~{layout/cruds}">
     <head>
     </head>
     <body>
         <div layout:fragment="content">
-            <div>
-                <label for="name">Name</label>
-                <span th:text="${section.name}"></span>
+            <!-- START -->
+
+
+          <!-- Link to back -->
+          <a th:href="@{/sections/{menuId}(menuId=${section.menuId})}"
+            class="text-decoration-none text-muted">
+            <i class="bi bi-arrow-left me-1"></i> Back to sections
+          </a>
+
+          <!-- Data -->
+          <div class="panel mt-3 mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+              <div>
+                <h1 class="h3 fw-bold mb-1" th:text="${section.name}">
+                </h1>
+                <p class="text-muted mb-2" th:text="${section.description}">
+                </p>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary"
+                  th:href="@{/sections/new/{id}(id=${section.menuId})}">
+                  <i class="bi bi-collection me-1"></i>
+                  New Section
+                </a>
+              </div>
             </div>
+          </div>
+
+          <!-- Products -->
+          <div id="sectionsContainer" class="row g-4">
+            <h3>Products</h3>
+            <div class="col-12 col-lg-6" th:each="product : ${section.products}">
+              <div class="card section-card h-100">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                  <div>
+                    <h2 class="h5 fw-bold mb-0" th:text="${product.name}">
+                    </h2>
+                    <small class="text-muted"
+                      th:text="${product.description}">
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- END -->
         </div>
     </body>
 </html>

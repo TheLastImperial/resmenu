@@ -17,3 +17,19 @@
 .action-btn {
     padding: 0.25rem 0.5rem;
 }
+.panel {
+    background:#fff;
+    border-radius:1rem;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+    padding:1.5rem;
+}
+.section-card {
+    border:0;
+    border-radius:1rem;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+.section-card .card-header {
+    background:#fff;
+    border-bottom:1px solid #eee;
+    border-radius:1rem 1rem 0 0;
+}

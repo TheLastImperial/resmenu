@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,7 +47,7 @@ public class ProductController {
     private final SectionService sectionService;
     private final StorageService storageService;
 
-    @GetMapping("/{menuId}/{id}")
+    @GetMapping("/show/{menuId}/{id}")
     public String get(@PathVariable Long menuId, @PathVariable Long id, Principal principal,
         Model model
     ) {
@@ -67,7 +68,8 @@ public class ProductController {
     ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(menuId, user.orElse(null));
-        List<ProductRs> products = productService.getAll(menu, page, size).stream().map(prod -> {
+        Page<ProductEntity> pageData = productService.getAll(menu, page, size);
+        List<ProductRs> products = pageData.stream().map(prod -> {
             ProductRs resp = new ProductRs();
             BeanUtils.copyProperties(prod, resp);
             return resp;
@@ -78,11 +80,19 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("menuId", menuId);
         model.addAttribute("menu", menuRs);
+
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalElements", pageData.getTotalElements());
+        model.addAttribute("currentPage", pageData.getNumber());
+        model.addAttribute("totalPages", pageData.getTotalPages());
+
         return "/products/index";
     }
     
     @GetMapping("/new/{menuId}")
-    public String newProduct(@PathVariable Long menuId, NewProductRq newProductRq, Principal principal, Model model) {
+    public String newProduct(
+        @PathVariable Long menuId, NewProductRq newProductRq, Principal principal, Model model
+    ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(menuId, user.orElse(null));        
         List<SectionRs> sections = sectionService.getAll(menu).stream().map(sect -> {
@@ -97,53 +107,64 @@ public class ProductController {
     }
     
     @PostMapping("/create")
-    public String create(NewProductRq rq, BindingResult result, Principal principal) throws Exception{
+    public String create(
+        NewProductRq newProductRq, BindingResult result, Principal principal
+    ) throws Exception{
+        log.info("Create Product Request: {}", newProductRq);
         if(result.hasErrors()){
             log.error("Errors: {}", result);
-            return "redirect:/products/new/" + rq.getMenuId();
+            return "redirect:/products/new/" + newProductRq.getMenuId();
         }
 
-        if(rq.getImage() != null){
-            StorageEntity storageEntity = storageService.create(rq.getImage());
-            rq.setImageId(storageEntity.getId());
+        if(newProductRq.getImage() != null){
+            StorageEntity storageEntity = storageService.create(newProductRq.getImage());
+            newProductRq.setImageId(storageEntity.getId());
         }
 
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(rq.getMenuId(), user.orElse(null));
-        SectionEntity section = sectionService.get(rq.getSectionId(), menu);
-        ProductEntity product = productService.create(rq, menu, section);
-        return "redirect:/products/" + menu.getId() + "/" + product.getId();
+        MenuEntity menu = menuService.get(newProductRq.getMenuId(), user.orElse(null));
+        SectionEntity section = sectionService.get(newProductRq.getSectionId(), menu);
+        ProductEntity product = productService.create(newProductRq, menu, section);
+        return "redirect:/products/show/" + menu.getId() + "/" + product.getId();
     }
 
     @GetMapping("/delete/{menuId}/{id}")
     public String delete(@PathVariable Long menuId, @PathVariable Long id, Principal principal) {
+        log.info("MenuId: {}, ProductId: {}, Principal: {}", menuId, id, principal);
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(id, user.orElse(null));
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         productService.delete(id, menu);
         return "redirect:/products/menu/" + menuId;
     }
 
     @GetMapping("/edit/{menuId}/{id}")
-    public String edit(@PathVariable Long menuId, @PathVariable Long id,
-        Model model, Principal principal
+    public String edit(@PathVariable Long menuId, @PathVariable Long id, 
+        EditProductRq editProductRq, Model model, Principal principal
     ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
-        MenuEntity menu = menuService.get(id, user.orElse(null));
+        MenuEntity menu = menuService.get(menuId, user.orElse(null));
         ProductEntity product = productService.get(id, menu);
-        ProductRs response = new ProductRs();
-        BeanUtils.copyProperties(product, response);
-        model.addAttribute("product", response);
+        List<SectionRs> sections = sectionService.getAll(menu).stream().map(sect -> {
+            SectionRs section = new SectionRs();
+            BeanUtils.copyProperties(sect, section);
+            return section;
+        }).collect(Collectors.toList());
+        BeanUtils.copyProperties(product, editProductRq);
+        editProductRq.setSectionId(product.getSection().getId());
+        log.info("Rq: {}", editProductRq);
+        model.addAttribute("sections", sections);
         return "/products/edit";
     }
     
     @PostMapping("/update/{menuId}/{id}")
-    public String update(@PathVariable Long menuId, @PathVariable Long id, Principal principal,
-        EditProductRq rq
+    public String update(
+        @PathVariable Long menuId, @PathVariable Long id, EditProductRq editProductRq,
+        Principal principal
     ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.get(menuId, user.orElse(null));
-        productService.edit(id, rq, menu);
-        return "redirect:/products/" + menuId + "/" + id;
+        productService.edit(id, editProductRq, menu);
+        return "redirect:/products/show/" + menuId + "/" + id;
     }
-    
+
 }

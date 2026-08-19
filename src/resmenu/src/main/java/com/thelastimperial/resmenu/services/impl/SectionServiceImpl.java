@@ -3,6 +3,7 @@ package com.thelastimperial.resmenu.services.impl;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,9 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public List<SectionEntity> getAll(MenuEntity menu, int page, int size) {
+    public Page<SectionEntity> getAll(MenuEntity menu, int page, int size) {
+        if(page < 1)
+            page = 1;
         Pageable pageable = PageRequest.of(page - 1, size);
         return sectionRepository.findAllByMenu(menu, pageable);
     }

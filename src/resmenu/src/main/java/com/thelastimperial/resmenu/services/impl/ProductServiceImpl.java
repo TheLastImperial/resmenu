@@ -1,8 +1,7 @@
 package com.thelastimperial.resmenu.services.impl;
 
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,7 +36,9 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<ProductEntity> getAll(MenuEntity menu, int page, int size) {
+    public Page<ProductEntity> getAll(MenuEntity menu, int page, int size) {
+        if(page == 0)
+            page = 1;
         Pageable pageable = PageRequest.of(page - 1, size);
         return productRepository.findAllByMenu(menu, pageable);
     }
@@ -62,6 +63,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public void delete(Long id, MenuEntity menu) {
+        log.info("ProductId: {}, Menu: {}", id, menu.getId());
         ProductEntity product = productRepository.findByIdAndMenu(id, menu)
             .orElseThrow(
                 ()-> new ResponseStatusException(HttpStatus.BAD_REQUEST)

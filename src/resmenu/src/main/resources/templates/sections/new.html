@@ -1,23 +1,62 @@
-<html layout:decorate="~{layout/main}">
+<html layout:decorate="~{layout/cruds}">
     <head>
     </head>
     <body>
         <div layout:fragment="content">
-            <form action="#"
-                th:action="@{/sections/create}"
-                th:object="${newSectionRq}"
-                method="post">
-                <div>
-                    <label for="name" class="form-label">name</label>
-                    <input type="text" th:field="*{name}" class="form-control">
+          <!-- START -->
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+              <div class="mb-4">
+                <a href="/menus" class="text-decoration-none text-muted">
+                  <i class="bi bi-arrow-left me-1"></i> Back to sections
+                </a>
+                <h1 class="h3 fw-bold mt-2">Create new section</h1>
+                <p class="text-muted mb-0">
+                  Complete the data to register a new sections.
+                </p>
+              </div>
+
+              <div class="form-container">
+                <form novalidate
+                  th:action="@{/sections/create}"
+                  th:object="${newSectionRq}"
+                  method="post">
+                  <div class="mb-3">
+                    <label class="form-label">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      required
+                      maxlength="100"
+                      th:field="*{name}">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">
+                      Description
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      required
+                      maxlength="100"
+                      th:field="*{description}">
                     <input type="hidden" th:field="*{menuId}">
-                </div>
-                <div class="mt-1">
+                  </div>
+                  <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <a th:href="@{/menus}" class="btn btn-secondary">
+                        Cancel
+                    </a>
                     <button type="submit" class="btn btn-primary">
-                        Save
+                      <i class="bi bi-plus-lg me-1"></i> Save
                     </button>
-                </div>
-            </form>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- END -->
         </div>
     </body>
 </html>

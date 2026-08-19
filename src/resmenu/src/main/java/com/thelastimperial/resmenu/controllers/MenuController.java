@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,8 +19,13 @@ import com.thelastimperial.resdomain.repositories.MenuRepository;
 import com.thelastimperial.resmenu.controllers.rq.EditMenuRq;
 import com.thelastimperial.resmenu.controllers.rq.NewMenuRq;
 import com.thelastimperial.resmenu.controllers.rs.MenuRs;
+import com.thelastimperial.resmenu.controllers.rs.ProductRs;
+import com.thelastimperial.resmenu.controllers.rs.SectionRs;
 import com.thelastimperial.resmenu.services.MenuService;
 import com.thelastimperial.resmenu.services.UserService;
+
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping(path="/menus")
+@Slf4j
 public class MenuController {
     private final MenuRepository menuRepository;
     private final MenuService menuService;
@@ -45,14 +52,18 @@ public class MenuController {
         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size
     ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
-
-        List<MenuRs> menus = menuService
-        .getAll(user.orElse(null), page, size).stream().map(ent -> {
+        Page<MenuEntity> pageData = menuService.getAll(user.orElse(null), page, size);
+        List<MenuRs> menus = pageData.stream().map(ent -> {
             MenuRs rs = new MenuRs();
             BeanUtils.copyProperties(ent, rs);
             return rs;
         }).collect(Collectors.toList());
+
         model.addAttribute("menus", menus);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalElements", pageData.getTotalElements());
+        model.addAttribute("currentPage", pageData.getNumber());
+        model.addAttribute("totalPages", pageData.getTotalPages());
         return "menus/index";
     }
 
@@ -62,7 +73,9 @@ public class MenuController {
     }
 
     @PostMapping("/create")
-    public String create(NewMenuRq menu, BindingResult result, Model model, Principal principal) {
+    public String create(
+        @Valid NewMenuRq menu, BindingResult result, Model model, Principal principal
+    ) {
         if (result.hasErrors()) {
             return "menus/new";
         }
@@ -72,18 +85,25 @@ public class MenuController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, Model model, Principal principal) {
+    public String edit(
+        @PathVariable Long id, EditMenuRq editMenuRq, Model model,
+        Principal principal
+    ) {
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menuEnt = menuService.get(id, user.orElse(null));
-        MenuRs rs = new MenuRs();
-        BeanUtils.copyProperties(menuEnt, rs);
+        BeanUtils.copyProperties(menuEnt, editMenuRq);
 
-        model.addAttribute("menu", rs);
         return "menus/edit";
     }
 
     @PostMapping("/update/{id}")
-    public String update(@PathVariable Long id, EditMenuRq editMenuRq, Principal principal) {
+    public String update(
+        @PathVariable Long id, @Valid EditMenuRq editMenuRq, BindingResult result,
+        Principal principal
+    ) {
+        if(result.hasErrors()){
+            return "menus/edit";
+        }
         Optional<UserEntity> user = userService.getByUsername(principal.getName());
         MenuEntity menu = menuService.update(editMenuRq, id, user.orElse(null));
         return "redirect:/menus/show/" + menu.getId();
@@ -95,6 +115,16 @@ public class MenuController {
         MenuEntity menuEntity = menuService.get(id, user.orElse(null));
         MenuRs menuRs = new MenuRs();
         BeanUtils.copyProperties(menuEntity, menuRs);
+        menuEntity.getSections().stream().forEach(sect -> {
+            SectionRs section = new SectionRs();
+            BeanUtils.copyProperties(sect, section);
+            sect.getProducts().stream().forEach(prod -> {
+                ProductRs product = new ProductRs();
+                BeanUtils.copyProperties(prod, product);
+                section.getProducts().add(product);
+            });
+            menuRs.getSections().add(section);
+        });
         model.addAttribute("menu", menuRs);
         return "menus/show";
     }

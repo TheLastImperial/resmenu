@@ -13,4 +13,6 @@ public class EditProductRq {
     private String name;
     private String description;
     private Double price;
+    private Long menuId;
+    private Long sectionId;
 }

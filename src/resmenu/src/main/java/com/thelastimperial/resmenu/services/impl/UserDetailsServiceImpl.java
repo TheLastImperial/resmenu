@@ -1,5 +1,6 @@
 package com.thelastimperial.resmenu.services.impl;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.thelastimperial.resmenu.entities.UserEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
 import com.thelastimperial.resmenu.services.UserService;
 
 import lombok.AllArgsConstructor;
@@ -25,8 +26,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userService.getByUsername(username);
-        
+        Optional<UserEntity> userOpt = userService.getByUsername(username);
+        if(userOpt.isEmpty())
+            throw new UsernameNotFoundException(username);
+
+        UserEntity user = userOpt.get();
         Set<GrantedAuthority> authorities = user
             .getRoles().stream()
             .map(role -> new SimpleGrantedAuthority(role.getName()))

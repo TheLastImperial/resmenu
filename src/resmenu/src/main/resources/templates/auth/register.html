@@ -1,0 +1,77 @@
+<html layout:decorate="~{/auth/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="card shadow-lg p-4 p-md-5">
+    <div class="text-center mb-4">
+      <div class="logo-container">
+        <i class="bi bi-shield-lock-fill"></i>
+      </div>
+      <h3 class="fw-bold text-dark m-0">New User</h3>
+    </div>
+
+    <form
+      th:action="@{/auth/register}"
+      th:object="${newUserRq}"
+      method="POST">
+      <div class="mb-3">
+        <label for="username" class="form-label text-secondary fw-semibold small">
+          Email
+        </label>
+        <input
+          th:field="*{username}"
+          th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+          type="text"
+          class="form-control"
+          placeholder="Email"
+          required>
+        <span
+          th:if="${#fields.hasErrors('username')}"
+          th:errors="*{username}"
+          th:class="'invalid-feedback'">
+        </span>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label text-secondary fw-semibold small">
+          Password
+        </label>
+          <input
+            th:field="*{password}"
+            th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+            type="password"
+            class="form-control"
+            placeholder="••••••••"
+            required>
+          <span
+            th:if="${#fields.hasErrors('password')}"
+            th:errors="*{password}"
+            th:class="'invalid-feedback'">
+          </span>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label text-secondary fw-semibold small">
+          Confirm Password
+        </label>
+        <input
+          th:field="*{passwordConfirmation}"
+          th:classappend="${#fields.hasErrors('passwordConfirmation')} ? 'is-invalid' : ''"
+          type="password"
+          class="form-control"
+          placeholder="••••••••"
+          required>
+          <span
+            th:if="${#fields.hasErrors('passwordConfirmation')}"
+            th:errors="*{passwordConfirmation}"
+            th:class="'invalid-feedback'">
+          </span>
+      </div>
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Create account</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body>
+</html>

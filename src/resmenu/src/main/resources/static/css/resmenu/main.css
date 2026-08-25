@@ -1,0 +1,113 @@
+:root {
+    --color-fondo: #fffaf3;
+    --color-primario: #8c3b2d;
+    --color-secundario: #d4a373;
+    --color-texto: #3e2723;
+    --color-card: #ffffff;
+}
+
+html[data-theme="dark"] {
+    --color-fondo: #2a1f1b;
+    --color-primario: #c58c7a;
+    --color-secundario: #d4a373;
+    --color-texto: #f3e5d8;
+    --color-card: #3e2c25;
+}
+
+body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, .navbar-brand {
+    font-family: 'Playfair Display', serif;
+}
+
+.menuHeader {
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    color: #fff;
+    padding: 6rem 1rem;
+    text-align: center;
+}
+
+.menuHeader h1 {
+    font-size: 3.5rem;
+    letter-spacing: 1px;
+}
+
+.menuHeader p {
+    font-size: 1.25rem;
+    opacity: 0.95;
+}
+
+.navbar {
+    background-color: var(--color-primario) !important;
+}
+
+.navbar-brand,
+.nav-link {
+    color: #fff !important;
+}
+
+.nav-link.active {
+    color: var(--color-secundario) !important;
+    font-weight: 700;
+}
+
+.category-title {
+    color: var(--color-primario);
+    border-bottom: 3px solid var(--color-secundario);
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    border: none;
+    border-radius: 1rem;
+    background-color: var(--color-card);
+    box-shadow: 0 4px 20px rgba(62, 39, 35, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(62, 39, 35, 0.15);
+}
+
+.card-img-top {
+    height: 220px;
+    object-fit: cover;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+.card-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--color-primario);
+}
+
+.card-text {
+    color: var(--color-texto);
+}
+
+.price {
+    color: var(--color-primario);
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+footer {
+    background-color: var(--color-primario);
+    color: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+@media (max-width: 576px) {
+    .hero h1 {
+    font-size: 2.25rem;
+    }
+}

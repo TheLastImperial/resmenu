@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>        
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- Loki Logging -->
+   <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+        </http>
+        <labels>
+            app=${APPLICATION_NAME}
+            host=${HOSTNAME}
+            level=%level
+        </labels>
+        <readMarkers>true</readMarkers>
+        <message>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </message>
+    </appender>
+     
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOKI" />
+    </root>
+</configuration>

@@ -1,19 +1,18 @@
 package com.thelastimperial.resmenu.services.impl;
 
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.thelastimperial.resdomain.entities.MenuEntity;
+import com.thelastimperial.resdomain.entities.UserEntity;
+import com.thelastimperial.resdomain.repositories.MenuRepository;
 import com.thelastimperial.resmenu.controllers.rq.EditMenuRq;
 import com.thelastimperial.resmenu.controllers.rq.NewMenuRq;
-import com.thelastimperial.resmenu.entities.MenuEntity;
-import com.thelastimperial.resmenu.entities.UserEntity;
-import com.thelastimperial.resmenu.repositories.MenuRepository;
 import com.thelastimperial.resmenu.services.MenuService;
 
 import lombok.AllArgsConstructor;
@@ -55,7 +54,9 @@ public class MenuServiceImpl implements MenuService{
         menuRepository.deleteById(id);
     }
 
-    public List<MenuEntity> getAll(UserEntity user, int page, int size){
+    public Page<MenuEntity> getAll(UserEntity user, int page, int size){
+        if(page < 0)
+            page = 1;
         Pageable pageable = PageRequest.of(page - 1, size);
         return menuRepository.findAllByUser(user, pageable);
     }

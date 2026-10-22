@@ -1,7 +1,16 @@
 # Resmenu project
 
-# Security
+Project to create online restaurant menus.
 
-The file `.src/resmenu/src/main/resources/application.yaml` have the properties `publicKey`,
-`privateKey` and `keyid` that must be change for your custom properties. With this you must create
-the your own JWT token for prometheus.
+## Configuration
+
+Configurations to run the app.
+
+### Storage
+
+- COM_THELASTIMPERIAL_RESMENU_STORAGE_PATH: Path to save the image products.
+
+### OAuth Client
+
+To configure the OAuth Client have to use the parameters from the OAuthClient.
+

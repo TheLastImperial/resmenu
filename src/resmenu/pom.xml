@@ -28,7 +28,14 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<auth.version>1.4.0</auth.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/TheLastImperial/*</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -59,6 +66,11 @@
 			<groupId>com.thelastimperial</groupId>
 			<artifactId>resdomain</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thelastimperial.auth</groupId>
+			<artifactId>oauthclient</artifactId>
+			<version>${auth.version}</version>
 		</dependency>
 
 		<!-- Security -->

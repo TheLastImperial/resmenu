@@ -1,5 +1,7 @@
 package com.thelastimperial.resmenu.services.impl;
 
+import java.util.UUID;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.thelastimperial.resdomain.entities.MenuEntity;
-import com.thelastimperial.resdomain.entities.UserEntity;
 import com.thelastimperial.resdomain.repositories.MenuRepository;
 import com.thelastimperial.resmenu.controllers.rq.EditMenuRq;
 import com.thelastimperial.resmenu.controllers.rq.NewMenuRq;
@@ -23,25 +24,25 @@ public class MenuServiceImpl implements MenuService{
     private MenuRepository menuRepository;
 
     @Override
-    public MenuEntity create(NewMenuRq rq, UserEntity user) {
+    public MenuEntity create(NewMenuRq rq, UUID user) {
         MenuEntity toSave = new MenuEntity();
         BeanUtils.copyProperties(rq, toSave);
-        toSave.setUser(user);
+        toSave.setUserId(user);
         MenuEntity saved = menuRepository.save(toSave);
         return saved;
     }
 
     @Override
-    public MenuEntity get(Long id, UserEntity user) {
-        return menuRepository.findByIdAndUser(id, user)
+    public MenuEntity get(Long id, UUID user) {
+        return menuRepository.findByIdAndUserId(id, user)
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
             );
     }
 
     @Override
-    public MenuEntity update(EditMenuRq rq, Long id, UserEntity user) {
-        MenuEntity toUpdate = menuRepository.findByIdAndUser(id, user).orElseThrow(
+    public MenuEntity update(EditMenuRq rq, Long id, UUID user) {
+        MenuEntity toUpdate = menuRepository.findByIdAndUserId(id, user).orElseThrow(
             ()-> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );
         BeanUtils.copyProperties(rq, toUpdate);
@@ -54,10 +55,10 @@ public class MenuServiceImpl implements MenuService{
         menuRepository.deleteById(id);
     }
 
-    public Page<MenuEntity> getAll(UserEntity user, int page, int size){
+    public Page<MenuEntity> getAll(UUID user, int page, int size){
         if(page < 0)
             page = 1;
         Pageable pageable = PageRequest.of(page - 1, size);
-        return menuRepository.findAllByUser(user, pageable);
+        return menuRepository.findAllByUserId(user, pageable);
     }
 }

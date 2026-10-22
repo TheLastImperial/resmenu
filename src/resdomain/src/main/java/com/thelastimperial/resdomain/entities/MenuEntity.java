@@ -2,6 +2,7 @@ package com.thelastimperial.resdomain.entities;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,9 +39,7 @@ public class MenuEntity {
     @ColumnDefault("false")
     private boolean active;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private UserEntity user;
+    private UUID userId;
 
     @OneToMany(mappedBy = "menu")
     private List<SectionEntity> sections;
